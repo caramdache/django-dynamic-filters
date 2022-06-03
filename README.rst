@@ -39,18 +39,16 @@ Integration Example
         first_name = models.CharField()
         last_name = models.CharField()
         birth_date = models.DateField()
-        is_married = models.BooleanField()
         address = models.ForeignKey(Address)
 
         class DynamicFilterMeta:
             dynamic_list_filter = {
-                'select_related': ('address'),
-                'prefetch_related': (),
+                'select_related': ('address'),          # Optional
+                'prefetch_related': (),                 # Optional
                 'fields': [
                     ('-', '---------'),
                     ('first_name', 'First name'),
                     ('last_name', 'Family name'),
-                    ('is_married', 'Married?'),      
                     ('birth_date', 'Date of birth'), 
                     ('-', '---------'),
                     ('address__town', 'City'),
