@@ -30,8 +30,8 @@ Integration Example
 
 Extending a ModelAdmin is straightforward:
 
-```python
 *models.py*
+```
 
 class Address(models.Model):
     town = models.CharField()
@@ -60,8 +60,8 @@ class Person(models.Model):
 
 ```
 
-```python
 *admin.py*
+```
 
 from dynfilters.filters import DynamicFilter
 
