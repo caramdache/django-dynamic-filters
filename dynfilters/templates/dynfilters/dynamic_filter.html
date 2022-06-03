@@ -1,0 +1,69 @@
+{% load static %}
+<h3>By filter</h3>
+<ul>
+{% for choice in choices %}
+    <li{% if choice.selected %} class="selected"{% endif %}>
+        <span style='float: left;'>
+            <a href="{{ choice.query_string|iriencode }}" title="{{ choice.display }}">
+                {{ choice.display }}
+            </a>
+        </span>
+
+        {% if forloop.first %}
+            <a href='/admin/dynfilters/dynamicfilterexpr/add/?next={{ choice.request_path|urlencode }}' title="Create new filter">
+                <span style='float: right;'>
+                    <img src="{% static 'admin/img/icon-addlink.svg' %}">
+                </span>
+            </a>
+
+        {% else %}
+            <form id="{{ choice.lookup }}" method="POST">{% csrf_token %}
+                <input type="hidden" name="post" value="yes">
+            </form>
+            <a href="#" onclick="javascript:confirmDelete(
+                '{{ choice.lookup }}', 
+                '/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/delete/',
+                '{{ choices.0.query_string|iriencode }}'
+
+            );" title="Delete filter">
+                <span style='float: right;'>
+                    <img src="{% static 'admin/img/icon-deletelink.svg' %}">
+                </span>
+            </a>
+            <a href='/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/change/?next={{ choice.request_path|urlencode }}' title="Edit filter">
+                <span style='float: right;'>
+                    <img src="{% static 'admin/img/icon-changelink.svg' %}">&nbsp;&nbsp;
+                </span>
+            </a>
+
+        {% endif %}
+
+        <div style='clear:both;'></div>
+    </li>
+{% endfor %}
+</ul>
+
+<script>
+function confirmDelete(lookup, href_delete, href_redirect) {
+    const deleteLocation = confirm('Delete filter');
+    if (deleteLocation) {
+        var form = document.getElementById(lookup);
+        sendData(form, href_delete, href_redirect);
+    }
+}
+
+function sendData(form, href_delete, href_redirect) {
+    var XHR = new XMLHttpRequest();
+    var FD = new FormData(form);
+
+    const crsftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+    FD.append('csrfmiddlewaretoken', crsftoken);
+
+    XHR.addEventListener("load", function(event) {
+        location.href = href_redirect;
+    });
+
+    XHR.open("POST", href_delete);
+    XHR.send(FD);
+}
+</script>

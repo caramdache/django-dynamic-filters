@@ -2,12 +2,14 @@
 Django Dynamic Filters
 ======================
 
-A django ModelAdmin mixin which adds advanced filtering abilities to the admin.
+A django ModelAdmin Filter which adds advanced filtering abilities to the admin.
 
 Requirements
 ------------
 
 * Django >= 4.0 on Python 3.9+/PyPy3
+* furl
+* django-admin-sortable2
 
 Installation & Set up
 ---------------------
@@ -21,11 +23,7 @@ Installation & Set up
         'dynfilters',
     ]
 
-3. Include the dynfilters URLconf in your project urls.py like this::
-
-    path('dynfilters/', include('dynfilters.urls')),
-
-4. Run ``python manage.py migrate`` to create the dynfilters models.
+3. Run ``python manage.py migrate`` to create the dynfilters models.
 
 Integration Example
 -------------------
@@ -33,21 +31,53 @@ Integration Example
 Extending a ModelAdmin is straightforward:
 
 ```python
-from dynfilters.admin import AdminDynamicFiltersMixin
+*models.py*
 
-class ProfileAdmin(AdminDynamicFiltersMixin, models.ModelAdmin):
-    list_filter = ('name', 'language', 'ts')   # simple list filters
+class Address(models.Model):
+    town = models.CharField()
 
-    # specify which fields can be selected in the advanced filter
-    # creation form
-    advanced_filter_fields = (
-        'name',
-        'language',
-        'ts',
+class Person(models.Model):
+    first_name = models.CharField()
+    last_name = models.CharField()
+    birth_date = models.DateField()
+    is_married = models.BooleanField()
+    address = models.ForeignKey(Address)
 
-        # even use related fields as lookup fields
-        'country__name',
-        'posts__title',
-        'comments__content',
-    )
+    class DynamicFilterMeta:
+        dynamic_list_filter = {
+            'select_related': ('address'),
+            'prefetch_related': (),
+            'fields': [
+                ('-', '---------'),
+                ('first_name', 'First name'),
+                ('last_name', 'Family name'),
+                ('is_married', 'Married?'),      # '?' in display text will mean field will be handled as boolean in queryset
+                ('birth_date', 'Date of birth'), # 'date' in field name will mean field will be handle as boolean in querset
+                ('-', '---------'),
+                ('address__town', 'City'),
+            ],
+        }
+
 ```
+
+```python
+*admin.py*
+
+from dynfilters.filters import DynamicFilter
+
+@admin.register(Person)
+class PersonAdmin(admin.ModelAdmin):
+    ...
+    dynamic_list_filter_modelname = 'myApp.Person'
+    list_filter = (DynamicFilter,)
+
+```
+
+Similar Packages
+----------------
+
+* Dynfilters was inspired by `django-advanced-filters`_, but I wanted something simpler that would require as few changes as possible to the django admin.
+* Another interesting package is `django-filter`_.
+
+.. _django-advanced-filters : https://github.com/modlinltd/django-advanced-filters
+.. _django-filter : https://github.com/carltongibson/django-filter
