@@ -114,9 +114,9 @@ def get_model_choices():
         if has_dynamic_list_filter((opts := model._meta))
     ]
 
-def redirect_to_next(request):
+def get_next_url(request):
     f = furl(request.META["HTTP_REFERER"])
-    return redirect(f.args['next'])
+    return f.args.get('next')
 
 @admin.register(DynamicFilterExpr)
 class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
@@ -144,10 +144,20 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
         return super().formfield_for_dbfield(db_field,**kwargs)
 
     def response_add(self, request, obj, post_url_continue=None):
-        return redirect_to_next(request)
+        url = get_next_url(request)
+        return (
+            redirect(url)
+            if url else
+            super().response_add(request, obj, post_url_continue)
+        )
 
     def response_change(self, request, obj):
-        return redirect_to_next(request)
+        url = get_next_url(request)
+        return (
+            redirect(url)
+            if url else
+            super().response_change(request, obj)
+        )
 
     def _creator(self, obj):
         return obj.user.initials
