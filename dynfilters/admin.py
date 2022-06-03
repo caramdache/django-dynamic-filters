@@ -159,6 +159,14 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
             super().response_change(request, obj)
         )
 
+    # def response_delete(self, request, obj_display, obj_id):
+    #     url = get_next_url(request)
+    #     return (
+    #         redirect(url)
+    #         if url else
+    #         super().response_delete(request, obj_display, obj_id)
+    #     )
+
     def _creator(self, obj):
         return obj.user.initials
 
