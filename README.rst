@@ -28,8 +28,6 @@ Installation & Set up
 Integration Example
 -------------------
 
-Extending a ModelAdmin is straightforward:
-
 **models.py**
 
 .. code-block:: python
@@ -74,7 +72,7 @@ Extending a ModelAdmin is straightforward:
 Similar Packages
 ----------------
 
-* Dynfilters was inspired by `django-advanced-filters`_, but I wanted something simpler that would require as few changes as possible to the django admin.
+* Dynfilters was inspired by `django-advanced-filters`_, but I wanted something simpler that required as little code as possible and worked with existing admin forms and inlines.
 * Another interesting package is `django-filter`_.
 
 .. _django-advanced-filters : https://github.com/modlinltd/django-advanced-filters
