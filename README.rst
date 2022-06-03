@@ -120,6 +120,8 @@ Similar Packages
 
 * Dynfilters was inspired by `django-advanced-filters`_, but I wanted something simpler that worked with existing admin forms and inlines and required less code.
 * Another interesting package is `django-filter`_.
+* And yet another one is `django-admin-search-builder`_.
 
 .. _django-advanced-filters : https://github.com/modlinltd/django-advanced-filters
 .. _django-filter : https://github.com/carltongibson/django-filter
+.. _django-admin-search-builder : https://github.com/peppelinux/django-admin-search-builder
