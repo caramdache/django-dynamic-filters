@@ -16,7 +16,9 @@ Installation & Set up
 
 1. Run ``pip install django-dynamic-filters`` to install dynfilters.
 
-2. Add "dynfilters" to your INSTALLED_APPS setting like this::
+2. Add "dynfilters" to your INSTALLED_APPS setting like this:
+
+.. code-block:: python
 
     INSTALLED_APPS = [
         ...
@@ -31,6 +33,7 @@ Integration Example
 Extending a ModelAdmin is straightforward:
 
 **models.py**
+
 .. code-block:: python
 
     class Address(models.Model):
@@ -59,6 +62,7 @@ Extending a ModelAdmin is straightforward:
             }
 
 **admin.py**
+
 .. code-block:: python
 
     from dynfilters.filters import DynamicFilter
