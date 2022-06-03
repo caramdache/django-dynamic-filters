@@ -30,48 +30,44 @@ Integration Example
 
 Extending a ModelAdmin is straightforward:
 
-*models.py*
-```
+**models.py**
+.. code-block:: python
 
-class Address(models.Model):
-    town = models.CharField()
+    class Address(models.Model):
+        town = models.CharField()
 
-class Person(models.Model):
-    first_name = models.CharField()
-    last_name = models.CharField()
-    birth_date = models.DateField()
-    is_married = models.BooleanField()
-    address = models.ForeignKey(Address)
+    class Person(models.Model):
+        first_name = models.CharField()
+        last_name = models.CharField()
+        birth_date = models.DateField()
+        is_married = models.BooleanField()
+        address = models.ForeignKey(Address)
 
-    class DynamicFilterMeta:
-        dynamic_list_filter = {
-            'select_related': ('address'),
-            'prefetch_related': (),
-            'fields': [
-                ('-', '---------'),
-                ('first_name', 'First name'),
-                ('last_name', 'Family name'),
-                ('is_married', 'Married?'),      # '?' in display text will mean field will be handled as boolean in queryset
-                ('birth_date', 'Date of birth'), # 'date' in field name will mean field will be handle as boolean in querset
-                ('-', '---------'),
-                ('address__town', 'City'),
-            ],
-        }
+        class DynamicFilterMeta:
+            dynamic_list_filter = {
+                'select_related': ('address'),
+                'prefetch_related': (),
+                'fields': [
+                    ('-', '---------'),
+                    ('first_name', 'First name'),
+                    ('last_name', 'Family name'),
+                    ('is_married', 'Married?'),      # '?' in display text will mean field will be handled as boolean in queryset
+                    ('birth_date', 'Date of birth'), # 'date' in field name will mean field will be handle as boolean in querset
+                    ('-', '---------'),
+                    ('address__town', 'City'),
+                ],
+            }
 
-```
+**admin.py**
+.. code-block:: python
 
-*admin.py*
-```
+    from dynfilters.filters import DynamicFilter
 
-from dynfilters.filters import DynamicFilter
-
-@admin.register(Person)
-class PersonAdmin(admin.ModelAdmin):
-    ...
-    dynamic_list_filter_modelname = 'myApp.Person'
-    list_filter = (DynamicFilter,)
-
-```
+    @admin.register(Person)
+    class PersonAdmin(admin.ModelAdmin):
+        ...
+        dynamic_list_filter_modelname = 'myApp.Person'
+        list_filter = (DynamicFilter,)
 
 Similar Packages
 ----------------
