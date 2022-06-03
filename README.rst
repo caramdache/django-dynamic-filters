@@ -59,15 +59,52 @@ Integration Example
 
 **admin.py**
 
+Operators
+---------
+
+The following operators are supported:
+
 .. code-block:: python
 
-    from dynfilters.filters import DynamicFilter
+    OP_CHOICES = [
+        ('-', '-'),
+        ('!', 'NOT'),
+        ('&', 'AND'),
+        ('|', 'OR'),
+        ('(', '('),
+        (')', ')'),
+    ]
 
-    @admin.register(Person)
-    class PersonAdmin(admin.ModelAdmin):
-        ...
-        dynamic_list_filter_modelname = 'myApp.Person'
-        list_filter = (DynamicFilter,)
+Lookups
+-------
+
+The following lookups are supported:
+
+.. code-block:: python
+
+    LOOKUP_CHOICES = [
+        ('-', '---------'),
+        ('=', 'Equals'),
+        ('icontains', 'Contains'),
+        ('istartswith', 'Starts with'),
+        ('iendswith', 'Ends with'),
+        ('in', 'One of'),
+        ('-', '---------'),
+        ('range', 'Date Range'),                # Requires the value to be: DD/MM/YYYY,DD/MM/YYYY
+        ('year', 'Date Year'),                  # Requires the value to be: DD/MM/YYYY
+        ('month', 'Date Month'),
+        ('day', 'Date Day'),
+        ('-', '---------'),
+        ('isnull', 'Is NULL'),
+        ('isnotnull', 'Is not NULL'),
+        ('istrue', 'Is TRUE'),
+        ('isfalse', 'Is FALSE'),
+        ('-', '---------'),
+        ('lt', 'Less Than'),
+        ('gt', 'Greater Than'),
+        ('lte', 'Less Than or Equal To'),
+        ('gte', 'Greater Than or Equal To'),
+    ]
 
 Similar Packages
 ----------------
