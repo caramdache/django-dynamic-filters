@@ -69,10 +69,12 @@ Integration Example
         dynamic_list_filter_modelname = 'myApp.Person'
         list_filter = (DynamicFilter,)
 
-Operators
----------
+Operators & Lookups
+-------------------
 
-The following operators are supported:
+The following operators and lookups are supported:
+
+**operators**
 
 .. code-block:: python
 
@@ -85,10 +87,7 @@ The following operators are supported:
         (')', ')'),
     ]
 
-Lookups
--------
-
-The following lookups are supported:
+**lookups**
 
 .. code-block:: python
 
