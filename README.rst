@@ -50,14 +50,24 @@ Integration Example
                     ('-', '---------'),
                     ('first_name', 'First name'),
                     ('last_name', 'Family name'),
-                    ('is_married', 'Married?'),      # '?' in display text will mean field will be handled as boolean in queryset
-                    ('birth_date', 'Date of birth'), # 'date' in field name will mean field will be handle as boolean in querset
+                    ('is_married', 'Married?'),      
+                    ('birth_date', 'Date of birth'), 
                     ('-', '---------'),
                     ('address__town', 'City'),
                 ],
             }
 
 **admin.py**
+
+.. code-block:: python
+
+    from dynfilters.filters import DynamicFilter
+
+    @admin.register(Person)
+    class PersonAdmin(admin.ModelAdmin):
+        ...
+        dynamic_list_filter_modelname = 'myApp.Person'
+        list_filter = (DynamicFilter,)
 
 Operators
 ---------
