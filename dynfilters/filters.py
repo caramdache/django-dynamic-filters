@@ -3,6 +3,7 @@ from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 
 from .models import DynamicFilterExpr, get_dynamic_list_filter_queryset
+from .utils import get_model_name, get_qualified_model_name
 
 
 class DynamicFilter(admin.SimpleListFilter):
@@ -12,7 +13,7 @@ class DynamicFilter(admin.SimpleListFilter):
 
     def __init__(self, request, params, model, model_admin):
         self.path = request.path
-        self.model_name = model_admin.dynamic_list_filter_modelname
+        self.model_name = get_qualified_model_name(model_admin.opts)
         return super().__init__(request, params, model, model_admin)
 
     def choices(self, changelist):
@@ -20,7 +21,6 @@ class DynamicFilter(admin.SimpleListFilter):
             "selected": self.value() is None,
             "query_string": changelist.get_query_string(remove=[self.parameter_name]),
             "display": "All",
-            "lookup": self.model_name,
             "request_path": self.path,
         }
         for lookup, title in self.lookup_choices:

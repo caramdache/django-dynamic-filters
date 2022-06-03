@@ -2,6 +2,14 @@ import collections
 import datetime
 import itertools
 
+
+def get_model_name(opts):
+    return opts.model_name.capitalize()
+
+def get_qualified_model_name(opts):
+    return f'{opts.app_label}.{opts.model_name.capitalize()}'
+
+
 def str_as_date(value):
     return datetime.datetime.strptime(value, '%d/%m/%Y').date()
 

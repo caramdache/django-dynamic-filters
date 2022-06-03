@@ -11,8 +11,19 @@ from django.utils.html import format_html, format_html_join
 
 from adminsortable2.admin import SortableAdminBase, SortableAdminMixin, SortableInlineAdminMixin, CustomInlineFormSet
 
-from .models import DynamicFilterExpr, DynamicFilterTerm, DynamicFilterColumn, DynamicFilterColumnSortOrder
-from .utils import str_as_date, str_as_date_range
+from .models import (
+    DynamicFilterExpr,
+    DynamicFilterTerm,
+    DynamicFilterColumn,
+    DynamicFilterColumnSortOrder,
+)
+
+from .utils import (
+    get_model_name, 
+    get_qualified_model_name,
+    str_as_date, 
+    str_as_date_range,
+)
 
 
 def get_field_choices(obj):
@@ -107,8 +118,8 @@ def get_model_choices():
 
     return [
         (
-            f'{opts.app_label}.{(name := opts.model_name.capitalize())}',
-            f'{name}'
+            get_qualified_model_name(opts),
+            get_model_name(opts)
         )
         for model in apps.get_models()
         if has_dynamic_list_filter((opts := model._meta))

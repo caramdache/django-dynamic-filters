@@ -66,7 +66,6 @@ Integration Example
     @admin.register(Person)
     class PersonAdmin(admin.ModelAdmin):
         ...
-        dynamic_list_filter_modelname = 'myApp.Person'
         list_filter = (DynamicFilter,)
 
 Operators & Lookups
