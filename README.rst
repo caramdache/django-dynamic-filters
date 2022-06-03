@@ -118,7 +118,7 @@ The following operators and lookups are supported:
 Similar Packages
 ----------------
 
-* Dynfilters was inspired by `django-advanced-filters`_, but I wanted something simpler that required as little code as possible and worked with existing admin forms and inlines.
+* Dynfilters was inspired by `django-advanced-filters`_, but I wanted something simpler that worked with existing admin forms and inlines and required less code.
 * Another interesting package is `django-filter`_.
 
 .. _django-advanced-filters : https://github.com/modlinltd/django-advanced-filters
