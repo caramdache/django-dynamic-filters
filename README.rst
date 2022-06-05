@@ -20,8 +20,10 @@ Requirements
 ------------
 
 * Django >= 4.0 on Python 3.9+/PyPy3
-* furl
-* django-admin-sortable2
+* django-admin-sortable2_ and furl_
+
+.. _django-admin-sortable2 : https://github.com/jrief/django-admin-sortable2
+.. _furl : https://github.com/gruns/furl
 
 Installation & Set up
 ---------------------
