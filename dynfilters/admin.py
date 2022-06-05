@@ -179,7 +179,7 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
     #     )
 
     def _creator(self, obj):
-        return obj.user.initials
+        return obj.user
 
     def _name(self, obj):
         return format_html(f'<a href="/admin/dynfilters/dynamicfilterexpr/{obj.id}/change/">{obj.name}</a>')
