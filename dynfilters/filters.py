@@ -35,9 +35,6 @@ class DynamicFilter(admin.SimpleListFilter):
             }
 
     def lookups(self, request, model_admin):
-        if not request.user.is_admin:
-            return tuple()
-
         return [
             (o.pk, o.name)
             for o in (
