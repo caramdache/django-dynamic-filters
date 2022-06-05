@@ -129,7 +129,7 @@ The following operators and lookups are supported:
 Similar Packages
 ----------------
 
-* Dynfilters was inspired by `django-advanced-filters`_, but I wanted something simpler that worked with existing admin forms and inlines and required less code.
+* Dynfilters was inspired by `django-advanced-filters`_, but I wanted something that worked with existing admin forms and inlines and that required as little code as possible.
 * Another interesting package is `django-filter`_.
 * And yet another one is `django-admin-search-builder`_.
 
