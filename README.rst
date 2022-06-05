@@ -4,6 +4,18 @@ Django Dynamic Filters
 
 A django ModelAdmin Filter which adds advanced filtering abilities to the admin.
 
+**creating filters**
+
+.. figure:: https://github.com/caramdache/django-dynamic-filters/blob/main/filter_edit.png
+   :alt: Creating a filter
+   :width: 768 px
+
+**applying filters**
+
+.. figure:: https://github.com/caramdache/django-dynamic-filters/blob/main/filter_user.png
+   :alt: Apply a filter
+   :width: 768 px
+   
 Requirements
 ------------
 
@@ -33,13 +45,13 @@ Integration Example
 .. code-block:: python
 
     class Address(models.Model):
-        town = models.CharField()
+        town = models.CharField(max_length=32)
 
     class Person(models.Model):
-        first_name = models.CharField()
-        last_name = models.CharField()
+        first_name = models.CharField(max_length=32)
+        last_name = models.CharField(max_length=32)
         birth_date = models.DateField()
-        address = models.ForeignKey(Address)
+        address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
         class DynamicFilterMeta:
             dynamic_list_filter = {
