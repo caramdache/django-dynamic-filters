@@ -26,7 +26,22 @@ def has_dynfilter(model_obj, opts):
     return hasattr(model_admin, 'dynfilters_fields') and not opts.proxy
 
 def get_dynfilters_fields(model_admin):
-    return getattr(model_admin, 'dynfilters_fields', [])
+    def humanize(f):
+        if f == '-':
+            return ('-', '---------')
+
+        if isinstance(f, str):
+            return (
+                f, 
+                f.replace('_', ' ').replace('__', ' ').capitalize()
+            )
+
+        return f
+
+    fields = getattr(model_admin, 'dynfilters_fields', [])
+    x = [humanize(f) for f in fields]
+    print(x)
+    return x
 
 def get_dynfilters_select_related(model_admin):
     return getattr(model_admin, 'dynfilters_select_related', [])

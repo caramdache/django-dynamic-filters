@@ -23,6 +23,7 @@ from .utils import (
     get_model_name, 
     get_qualified_model_name,
     has_dynfilter,
+    get_dynfilters_fields,
     str_as_date, 
     str_as_date_range,
 )
@@ -30,7 +31,7 @@ from .utils import (
 
 def get_field_choices(obj):
     model_admin = get_model_admin(obj)
-    return getattr(model_admin, 'dynfilters_fields', [])
+    return get_dynfilters_fields(model_admin)
 
 class DynamicFilterInline(admin.TabularInline):
     extra = 0
