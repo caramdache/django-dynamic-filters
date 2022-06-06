@@ -55,20 +55,6 @@ Integration Example
         birth_date = models.DateField()
         address = models.ForeignKey(Address, on_delete=models.CASCADE)
 
-        class DynamicFilterMeta:
-            dynamic_list_filter = {
-                'select_related': ('address'),          # Optional
-                'prefetch_related': (),                 # Optional
-                'fields': [
-                    ('-', '---------'),
-                    ('first_name', 'First name'),
-                    ('last_name', 'Family name'),
-                    ('birth_date', 'Date of birth'), 
-                    ('-', '---------'),
-                    ('address__town', 'City'),
-                ],
-            }
-
 **admin.py**
 
 .. code-block:: python
@@ -80,6 +66,18 @@ Integration Example
         ...
         list_filter = (DynamicFilter,)
 
+        dynfilters_fields = [
+            ('-', '---------'),
+            ('first_name', 'First name'),
+            ('last_name', 'Family name'),
+            ('birth_date', 'Date of birth'),
+            ('-', '---------'),
+            ('address__town', 'City'),
+        ]
+
+        dynfilters_select_related = ['address'] # Optional
+        dynfilters_prefetch_related = []        # Optional
+        
 Operators & Lookups
 -------------------
 
