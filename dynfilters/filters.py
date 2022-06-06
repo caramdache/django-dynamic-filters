@@ -6,6 +6,9 @@ from .models import DynamicFilterExpr
 from .utils import (
     get_model_admin,
     get_qualified_model_name,
+    get_dynfilters_fields,
+    get_dynfilters_select_related,
+    get_dynfilters_prefetch_related,
     flatten,
 )
 
@@ -64,19 +67,19 @@ class DynamicFilter(admin.SimpleListFilter):
 
             fields = flatten([
                 f[0].split('__') 
-                for f in getattr(model_admin, 'dynfilters_fields', [])
+                for f in get_dynfilters_fields(model_admin)
                 if f[0] != '-'
             ])
 
             select_related = [
                 f 
-                for f in getattr(model_admin, 'dynfilters_select_related', [])
+                for f in get_dynfilters_select_related(model_admin)
                 if f in fields
             ]
 
             prefetch_related = [
                 f 
-                for f in getattr(model_admin, 'dynfilters_prefetch_related', [])
+                for f in get_dynfilters_prefetch_related(model_admin)
                 if f in fields
             ]
 

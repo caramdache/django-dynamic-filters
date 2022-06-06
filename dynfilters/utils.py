@@ -20,9 +20,19 @@ def get_model_admin(obj):
     model_obj = get_model_obj(obj)
     return admin.site._registry.get(model_obj)
 
+
 def has_dynfilter(model_obj, opts):
     model_admin = admin.site._registry.get(model_obj)
     return hasattr(model_admin, 'dynfilters_fields') and not opts.proxy
+
+def get_dynfilters_fields(model_admin):
+    return getattr(model_admin, 'dynfilters_fields', [])
+
+def get_dynfilters_select_related(model_admin):
+    return getattr(model_admin, 'dynfilters_select_related', [])
+
+def get_dynfilters_prefetch_related(model_admin):
+    return getattr(model_admin, 'dynfilters_prefetch_related', [])
 
 
 def str_as_date(value):
