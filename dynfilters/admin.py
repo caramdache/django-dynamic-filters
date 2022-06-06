@@ -36,13 +36,12 @@ class DynamicFilterInline(admin.TabularInline):
     extra = 0
 
     def formfield_for_dbfield(self, db_field, **kwargs):
-        request = kwargs['request']
-        obj = request.parent_object
+        obj = kwargs['request'].parent_object
 
         if db_field.name == 'field' and obj:
             kwargs['widget'] = forms.Select(choices=get_field_choices(obj))
 
-        return super().formfield_for_dbfield(db_field,**kwargs)
+        return super().formfield_for_dbfield(db_field, **kwargs)
 
 
 class DynamicFilterTermInlineFormSet(CustomInlineFormSet):

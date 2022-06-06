@@ -40,14 +40,12 @@ def get_dynamic_list_filter_queryset(obj, queryset):
         if f in fields
     ]
 
-    # return (
-    #     queryset
-    #         .select_related(*select_related)
-    #         .prefetch_related(*prefetch_related)
-    #         .filter(obj.as_q())
-    # )
-
-    return queryset.filter(obj.as_q())
+    return (
+        queryset
+            .select_related(*select_related)
+            .prefetch_related(*prefetch_related)
+            .filter(obj.as_q())
+    )
 
 
 class DynamicFilterExpr(models.Model):
@@ -61,12 +59,7 @@ class DynamicFilterExpr(models.Model):
     is_global = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.as_sql()
-
-    #     return '\n'.join([
-    #         str(term) 
-    #         for term in self.normalized_terms()
-    #     ])
+        return self.name
 
     def execute(self):
         model_obj = get_model_obj(self)
@@ -100,7 +93,7 @@ class DynamicFilterExpr(models.Model):
             nterms.append(item)
 
         if not nterms:
-            # Add no-op to avoid empty filter.
+            # Add no-op to avoid an empty filter.
             nterms.append(DynamicFilterTerm(op=' '))
 
         return nterms
@@ -248,7 +241,7 @@ class DynamicFilterTerm(models.Model):
     def __str__(self):
         if self.op in ('-', '!'):
             comparison = '!=' if self.op == '!' else '=='
-            return f'{self.field}__{self.lookup} {comparison} {self.value}'
+            return f'{self.get_keypath()} {comparison} {self.get_value()}'
         else:
             return self.op
 
