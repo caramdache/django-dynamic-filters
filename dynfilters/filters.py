@@ -2,8 +2,12 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 
-from .models import DynamicFilterExpr, get_dynamic_list_filter_queryset
-from .utils import get_model_name, get_qualified_model_name
+from .models import DynamicFilterExpr
+from .utils import (
+    get_model_admin,
+    get_qualified_model_name,
+    flatten,
+)
 
 
 class DynamicFilter(admin.SimpleListFilter):
@@ -18,7 +22,7 @@ class DynamicFilter(admin.SimpleListFilter):
 
     def has_output(self):
         return True
-        
+
     def choices(self, changelist):
         yield {
             "selected": self.value() is None,
@@ -53,7 +57,33 @@ class DynamicFilter(admin.SimpleListFilter):
         if self.value() is not None:
             try:
                 obj = DynamicFilterExpr.objects.get(pk=self.value())
-                return get_dynamic_list_filter_queryset(obj, queryset)
-            
             except DynamicFilterExpr.DoesNotExist:
-                return queryset
+                return queryset # filter no longer exists
+
+            model_admin = get_model_admin(obj)
+
+            fields = flatten([
+                f[0].split('__') 
+                for f in getattr(model_admin, 'dynfilters_fields', [])
+                if f[0] != '-'
+            ])
+
+            select_related = [
+                f 
+                for f in getattr(model_admin, 'dynfilters_select_related', [])
+                if f in fields
+            ]
+
+            prefetch_related = [
+                f 
+                for f in getattr(model_admin, 'dynfilters_prefetch_related', [])
+                if f in fields
+            ]
+
+            return (
+                queryset
+                    .select_related(*select_related)
+                    .prefetch_related(*prefetch_related)
+                    .filter(obj.as_q())
+            )
+            

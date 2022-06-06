@@ -12,41 +12,10 @@ from django.utils.translation import gettext_lazy as _
 
 from .shunting_yard import shunting_yard_eval
 from .utils import (
-    get_model_admin,
     get_model_obj,
-    flatten,
     str_as_date, 
     str_as_date_range, 
 )
-
-
-def get_dynamic_list_filter_queryset(obj, queryset):
-    model_admin = get_model_admin(obj)
-
-    fields = flatten([
-        f[0].split('__') 
-        for f in getattr(model_admin, 'dynfilters_fields', [])
-        if f[0] != '-'
-    ])
-
-    select_related = [
-        f 
-        for f in getattr(model_admin, 'dynfilters_select_related', [])
-        if f in fields
-    ]
-
-    prefetch_related = [
-        f 
-        for f in getattr(model_admin, 'dynfilters_prefetch_related', [])
-        if f in fields
-    ]
-
-    return (
-        queryset
-            .select_related(*select_related)
-            .prefetch_related(*prefetch_related)
-            .filter(obj.as_q())
-    )
 
 
 class DynamicFilterExpr(models.Model):
@@ -61,14 +30,6 @@ class DynamicFilterExpr(models.Model):
 
     def __str__(self):
         return self.name
-
-    def execute(self):
-        model_obj = get_model_obj(self)
-
-        return get_dynamic_list_filter_queryset(
-            model_obj,
-            model_obj.objects.all(),
-        )
 
     # Make implicit operators explicit to
     # ensure the ops stack is never empty.
@@ -99,6 +60,10 @@ class DynamicFilterExpr(models.Model):
 
         return nterms
 
+    def as_q(self):
+        terms = self.normalized_terms()
+        return shunting_yard_eval(terms)
+
     def as_sql(self):
         model_obj = get_model_obj(self)
         query = Query(model_obj)
@@ -109,10 +74,6 @@ class DynamicFilterExpr(models.Model):
         query_str, args = where.as_sql(compiler, connection)
 
         return query_str % tuple(args)
-
-    def as_q(self):
-        terms = self.normalized_terms()
-        return shunting_yard_eval(terms)
 
 
 class DynamicFilterTerm(models.Model):
