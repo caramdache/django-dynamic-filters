@@ -16,6 +16,9 @@ class DynamicFilter(admin.SimpleListFilter):
         self.model_name = get_qualified_model_name(model_admin.opts)
         return super().__init__(request, params, model, model_admin)
 
+    def has_output(self):
+        return True
+        
     def choices(self, changelist):
         yield {
             "selected": self.value() is None,
