@@ -1,21 +1,24 @@
 from furl import furl
-from operator import itemgetter
 
 from django import forms
 from django.apps import apps
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from django.forms import BaseInlineFormSet
 from django.shortcuts import redirect
 from django.utils.html import format_html, format_html_join
 
-from adminsortable2.admin import SortableAdminBase, SortableAdminMixin, SortableInlineAdminMixin, CustomInlineFormSet
+from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 
 from .models import (
     DynamicFilterExpr,
     DynamicFilterTerm,
     DynamicFilterColumn,
     DynamicFilterColumnSortOrder,
+)
+
+from .forms import (
+    DynamicFilterTermInlineForm,
+    DynamicFilterTermInlineFormSet,
 )
 
 from .utils import (
@@ -41,53 +44,6 @@ class DynamicFilterInline(admin.TabularInline):
             kwargs['widget'] = forms.Select(choices=get_dynfilters_fields(model_admin))
 
         return super().formfield_for_dbfield(db_field, **kwargs)
-
-
-class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
-    pass
-
-
-class DynamicFilterTermInlineForm(forms.ModelForm):
-    class Meta:
-        model = DynamicFilterTerm
-        fields = ('op', 'field', 'lookup', 'value', 'bilateral', 'order')
-
-    def clean(self):
-        errors = {}
-
-        op, field, lookup, value = itemgetter('op', 'field', 'lookup', 'value')(self.cleaned_data)
-
-        if op in ('-', '!'):
-            if field == '-':
-                errors.update({'field': 'Missing value'})
-
-            if lookup == '-':
-                errors.update({'lookup': 'Missing value'})
-
-            if not value:
-                if lookup in ('-', 'iexact', 'icontains', 'range', 'lt', 'gt', 'lte', 'gte'):
-                    errors.update({'value': 'Missing value'})
-
-            else:
-                if 'date' in field:
-                    if lookup == 'range':
-                        try:
-                            str_as_date_range(value)
-                        except:
-                            errors.update({'value': 'Should be "DD/MM/YYYY, DD/MM/YYYY"'})
-
-                    else:
-                        try:
-                            str_as_date(value)
-                        except:
-                            errors.update({'value': 'Should be "DD/MM/YYYY"'})
-
-
-                if lookup in ('lt', 'gt', 'lte', 'gte'):
-                    pass
-
-        if errors:
-            raise ValidationError(errors)
 
 
 class DynamicFilterTermInline(SortableInlineAdminMixin, DynamicFilterInline):
