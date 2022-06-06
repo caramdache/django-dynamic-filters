@@ -2,12 +2,27 @@ import collections
 import datetime
 import itertools
 
+from django.apps import apps
+from django.contrib import admin
+
 
 def get_model_name(opts):
     return opts.model_name.capitalize()
 
 def get_qualified_model_name(opts):
     return f'{opts.app_label}.{opts.model_name.capitalize()}'
+
+def get_model_obj(obj):
+    app_label, model_name = obj.model.split('.')
+    return apps.get_model(app_label, model_name)
+
+def get_model_admin(obj):
+    model_obj = get_model_obj(obj)
+    return admin.site._registry.get(model_obj)
+
+def has_dynfilter(model_obj, opts):
+    model_admin = admin.site._registry.get(model_obj)
+    return hasattr(model_admin, 'dynfilters_fields') and not opts.proxy
 
 
 def str_as_date(value):

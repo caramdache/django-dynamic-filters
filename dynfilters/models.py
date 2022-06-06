@@ -10,29 +10,33 @@ from django.db.models.sql.compiler import SQLCompiler
 from django.db.models.sql.query import Query
 from django.utils.translation import gettext_lazy as _
 
-from .utils import str_as_date, str_as_date_range, flatten
+from .utils import (
+    get_model_admin,
+    get_model_obj,
+    flatten,
+    str_as_date, 
+    str_as_date_range, 
+)
 
 
 def get_dynamic_list_filter_queryset(obj, queryset):
-    app_label, model = obj.model.split('.')
-    opts = apps.get_model(app_label, model)._meta
-    list_filter = opts.model.DynamicFilterMeta.dynamic_list_filter
+    model_admin = get_model_admin(obj)
 
     fields = flatten([
         f[0].split('__') 
-        for f in list_filter.get('fields', []) 
+        for f in getattr(model_admin, 'dynfilters_fields', [])
         if f[0] != '-'
     ])
 
     select_related = [
         f 
-        for f in list_filter.get('select_related', []) 
+        for f in getattr(model_admin, 'dynfilters_select_related', [])
         if f in fields
     ]
 
     prefetch_related = [
         f 
-        for f in list_filter.get('prefetch_related', [])
+        for f in getattr(model_admin, 'dynfilters_prefetch_related', [])
         if f in fields
     ]
 
@@ -64,12 +68,8 @@ class DynamicFilterExpr(models.Model):
     #         for term in self.normalized_terms()
     #     ])
 
-    def get_model_obj(self):
-        app_label, model = self.model.split('.')
-        return apps.get_model(app_label, model)
-
     def execute(self):
-        model_obj = self.get_model_obj()
+        model_obj = get_model_obj(self)
 
         return get_dynamic_list_filter_queryset(
             model_obj,
@@ -106,7 +106,7 @@ class DynamicFilterExpr(models.Model):
         return nterms
 
     def as_sql(self):
-        model_obj = self.get_model_obj()
+        model_obj = get_model_obj(self)
         query = Query(model_obj)
 
         where = self.as_q().resolve_expression(query)

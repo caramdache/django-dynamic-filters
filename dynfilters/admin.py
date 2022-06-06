@@ -19,18 +19,18 @@ from .models import (
 )
 
 from .utils import (
+    get_model_admin,
     get_model_name, 
     get_qualified_model_name,
+    has_dynfilter,
     str_as_date, 
     str_as_date_range,
 )
 
 
 def get_field_choices(obj):
-    app_label, model = obj.model.split('.')
-    model_obj = apps.get_model(app_label, model)
-    list_filter = model_obj.DynamicFilterMeta.dynamic_list_filter
-    return list_filter['fields']
+    model_admin = get_model_admin(obj)
+    return getattr(model_admin, 'dynfilters_fields', [])
 
 class DynamicFilterInline(admin.TabularInline):
     extra = 0
@@ -113,16 +113,13 @@ class DynamicFilterColumnSortOrderInline(SortableInlineAdminMixin, DynamicFilter
 
 
 def get_model_choices():
-    def has_dynamic_list_filter(opts):
-        return hasattr(opts.model, 'DynamicFilterMeta') and not opts.proxy
-
     return [
         (
             get_qualified_model_name(opts),
             get_model_name(opts)
         )
         for model in apps.get_models()
-        if has_dynamic_list_filter((opts := model._meta))
+        if has_dynfilter(model, (opts := model._meta))
     ]
 
 def get_next_url(request):
