@@ -67,11 +67,11 @@ Integration Example
         list_filter = (DynamicFilter,)
 
         dynfilters_fields = [
-            ('-', '---------'),
-            ('first_name', 'First name'),
-            ('last_name', 'Family name'),
+            '-',
+            'first_name',
+            'last_name',
             ('birth_date', 'Date of birth'),
-            ('-', '---------'),
+            '-',
             ('address__town', 'City'),
         ]
 
