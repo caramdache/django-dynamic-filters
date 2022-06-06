@@ -106,10 +106,10 @@ The following operators and lookups are supported:
         ('icontains', 'Contains'),
         ('istartswith', 'Starts with'),
         ('iendswith', 'Ends with'),
-        ('in', 'One of'),
+        ('in', 'One of'),          # Requires the value to be: aaa,bbb,ccc
         ('-', '---------'),
-        ('range', 'Date Range'),                # Requires the value to be: DD/MM/YYYY,DD/MM/YYYY
-        ('year', 'Date Year'),                  # Requires the value to be: DD/MM/YYYY
+        ('range', 'Date Range'),   # Requires the value to be: DD/MM/YYYY,DD/MM/YYYY
+        ('year', 'Date Year'), 
         ('month', 'Date Month'),
         ('day', 'Date Day'),
         ('-', '---------'),
