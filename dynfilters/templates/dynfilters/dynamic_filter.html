@@ -9,34 +9,32 @@
             </a>
         </span>
 
-        {% if forloop.first %}
-            <span style='float: right;'>
-                <a href='/admin/dynfilters/dynamicfilterexpr/add/?next={{ choice.request_path|urlencode }}' title="Create new filter">
-                    <img src="{% static 'admin/img/icon-addlink.svg' %}">
-                </a>
-            </span>
+        <span style='float: right;'>
+            {% if forloop.first %}
+                    <a href='/admin/dynfilters/dynamicfilterexpr/add/?next={{ choice.request_path|urlencode }}' title="Create new filter">
+                        <img src="{% static 'admin/img/icon-addlink.svg' %}">
+                    </a>
 
-        {% else %}
-            <span style='float: right;'>
-                <a href='/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/change/?next={{ choice.request_path|urlencode }}' title="Edit filter" style="display:inline;">
-                    <img src="{% static 'admin/img/icon-changelink.svg' %}">
-                </a>
+            {% else %}
+                    <a href='/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/change/?next={{ choice.request_path|urlencode }}' title="Edit filter" style="display:inline;">
+                        <img src="{% static 'admin/img/icon-changelink.svg' %}">
+                    </a>
 
-                <form id="{{ choice.lookup }}" method="POST" style="display:inline;">{% csrf_token %}
-                    <input type="hidden" name="post" value="yes">
-                </form>
+                    <form id="{{ choice.lookup }}" method="POST" style="display:inline;">{% csrf_token %}
+                        <input type="hidden" name="post" value="yes">
+                    </form>
 
-                <a href="#" onclick="javascript:confirmDelete(
-                    '{{ choice.lookup }}', 
-                    '/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/delete/',
-                    '{{ choices.0.query_string|iriencode }}'
+                    <a href="#" onclick="javascript:confirmDelete(
+                        '{{ choice.lookup }}', 
+                        '/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/delete/',
+                        '{{ choices.0.query_string|iriencode }}'
 
-                );" title="Delete filter" style="display:inline;">
-                    <img src="{% static 'admin/img/icon-deletelink.svg' %}">
-                </a>
-            </span>
+                    );" title="Delete filter" style="display:inline;">
+                        <img src="{% static 'admin/img/icon-deletelink.svg' %}">
+                    </a>
 
-        {% endif %}
+            {% endif %}
+        </span>
 
         <div style='clear:both;'></div>
     </li>
