@@ -29,7 +29,7 @@
                         '/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/delete/',
                         '{{ choices.0.query_string|iriencode }}'
 
-                    );" title="Delete filter?" style="display:inline;">
+                    );" title="Delete filter" style="display:inline;">
                         <img src="{% static 'admin/img/icon-deletelink.svg' %}">
                     </a>
 
@@ -43,7 +43,7 @@
 
 <script>
 function confirmDelete(lookup, href_delete, href_redirect) {
-    const deleteLocation = confirm('Delete filter');
+    const deleteLocation = confirm('Do you really want to delete this filter?');
     if (deleteLocation) {
         var form = document.getElementById(lookup);
         sendData(form, href_delete, href_redirect);
