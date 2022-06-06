@@ -22,16 +22,13 @@ from .utils import (
     get_model_admin,
     get_model_name, 
     get_qualified_model_name,
+    get_model_choices,
     has_dynfilter,
     get_dynfilters_fields,
     str_as_date, 
     str_as_date_range,
 )
 
-
-def get_field_choices(obj):
-    model_admin = get_model_admin(obj)
-    return get_dynfilters_fields(model_admin)
 
 class DynamicFilterInline(admin.TabularInline):
     extra = 0
@@ -40,7 +37,8 @@ class DynamicFilterInline(admin.TabularInline):
         obj = kwargs['request'].parent_object
 
         if db_field.name == 'field' and obj:
-            kwargs['widget'] = forms.Select(choices=get_field_choices(obj))
+            model_admin = get_model_admin(obj)
+            kwargs['widget'] = forms.Select(choices=get_dynfilters_fields(model_admin))
 
         return super().formfield_for_dbfield(db_field, **kwargs)
 
@@ -111,16 +109,6 @@ class DynamicFilterColumnSortOrderInline(SortableInlineAdminMixin, DynamicFilter
     verbose_name = 'Sort Order'
     verbose_name_plural = 'Sort Orders'
 
-
-def get_model_choices():
-    return [
-        (
-            get_qualified_model_name(opts),
-            get_model_name(opts)
-        )
-        for model in apps.get_models()
-        if has_dynfilter(model, (opts := model._meta))
-    ]
 
 def get_next_url(request):
     f = furl(request.META["HTTP_REFERER"])
