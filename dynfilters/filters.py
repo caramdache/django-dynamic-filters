@@ -20,7 +20,6 @@ class DynamicFilter(admin.SimpleListFilter):
 
     def __init__(self, request, params, model, model_admin):
         self.path = request.path
-        self.model_name = get_qualified_model_name(model_admin.opts)
         return super().__init__(request, params, model, model_admin)
 
     def has_output(self):
@@ -45,12 +44,14 @@ class DynamicFilter(admin.SimpleListFilter):
             }
 
     def lookups(self, request, model_admin):
+        model_name = get_qualified_model_name(model_admin.opts)
+        
         return [
             (o.pk, o.name)
             for o in (
                 DynamicFilterExpr
                     .objects
-                    .filter(model=self.model_name)
+                    .filter(model=model_name)
                     .filter(user=request.user)
                     .order_by('name')
                 )

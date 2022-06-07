@@ -22,10 +22,7 @@ from .forms import (
 
 from .utils import (
     get_model_admin,
-    get_model_name, 
-    get_qualified_model_name,
     get_model_choices,
-    has_dynfilter,
     get_dynfilters_fields,
 )
 
