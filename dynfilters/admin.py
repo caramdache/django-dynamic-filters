@@ -27,8 +27,6 @@ from .utils import (
     get_model_choices,
     has_dynfilter,
     get_dynfilters_fields,
-    str_as_date, 
-    str_as_date_range,
 )
 
 

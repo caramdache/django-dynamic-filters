@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from adminsortable2.admin import CustomInlineFormSet
 
 from .models import DynamicFilterTerm
+from .utils import str_as_date, str_as_date_range
 
 
 class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
