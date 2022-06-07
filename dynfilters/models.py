@@ -24,9 +24,9 @@ class DynamicFilterExpr(models.Model):
         verbose_name_plural = 'Filters'
 
     name = models.CharField(max_length=128, default='Report')
-    model = models.CharField(max_length=64)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_global = models.BooleanField(default=False)
+    model = models.CharField(max_length=64, db_index=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True)
+    is_global = models.BooleanField(default=False, db_index=True)
 
     def __str__(self):
         return self.name
