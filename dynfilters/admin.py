@@ -3,7 +3,6 @@ from furl import furl
 from django import forms
 from django.apps import apps
 from django.contrib import admin
-from django.core.exceptions import ValidationError
 from django.shortcuts import redirect
 from django.utils.html import format_html, format_html_join
 
