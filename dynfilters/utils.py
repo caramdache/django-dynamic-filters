@@ -12,6 +12,16 @@ def get_model_name(opts):
 def get_qualified_model_name(opts):
     return f'{opts.app_label}.{opts.model_name.capitalize()}'
 
+def get_qualified_model_names(opts):
+    # The model may be a proxy on a different sites, so look at parents also
+    return [
+        get_qualified_model_name(opts)
+    ] + [
+        f'{meta.app_label}.{meta.model_name.capitalize()}'
+        for parent in opts.get_parent_list() 
+        if (meta := parent._meta)
+    ]
+
 def get_model_obj(obj):
     app_label, model_name = obj.model.split('.')
     return apps.get_model(app_label, model_name)

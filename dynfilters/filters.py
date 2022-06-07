@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .models import DynamicFilterExpr
 from .utils import (
     get_model_admin,
-    get_qualified_model_name,
+    get_qualified_model_names,
     get_dynfilters_fields,
     get_dynfilters_select_related,
     get_dynfilters_prefetch_related,
@@ -44,14 +44,14 @@ class DynamicFilter(admin.SimpleListFilter):
             }
 
     def lookups(self, request, model_admin):
-        model_name = get_qualified_model_name(model_admin.opts)
+        model_names = get_qualified_model_names(model_admin.opts)
         
         return [
             (o.pk, o.name)
             for o in (
                 DynamicFilterExpr
                     .objects
-                    .filter(model=model_name)
+                    .filter(model__in=model_names)
                     .filter(user=request.user)
                     .order_by('name')
                 )
