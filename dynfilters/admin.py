@@ -22,6 +22,7 @@ from .models import (
 )
 
 from .forms import (
+    DynamicFilterExprForm,
     DynamicFilterTermInlineForm,
     DynamicFilterTermInlineFormSet,
 )
@@ -65,6 +66,7 @@ def get_next_url(request):
 
 @admin.register(DynamicFilterExpr)
 class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
+    form = DynamicFilterExprForm
     inlines = [DynamicFilterTermInline, DynamicFilterColumnInline, DynamicFilterColumnSortOrderInline]
 
     list_per_page = 50
@@ -76,7 +78,10 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         request.parent_object = obj
-        return super().get_form(request, obj, **kwargs)
+        
+        form = super().get_form(request, obj, **kwargs)
+        form.referer_uri = request.build_absolute_uri()
+        return form
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'model':

@@ -30,6 +30,7 @@ class DynamicFilterExpr(models.Model):
     def __str__(self):
         return self.name
 
+
     # Make implicit operators explicit, to ensure the ops stack is never empty.
     def normalized_terms(self):
         nterms = []

@@ -1,12 +1,50 @@
+from furl import furl
 from operator import itemgetter
 
 from django import forms
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 from adminsortable2.admin import CustomInlineFormSet
 
 from .models import DynamicFilterExpr, DynamicFilterTerm
-from .utils import str_as_date, str_as_date_range
+from .utils import (
+    to_int,
+    str_as_date, 
+    str_as_date_range, 
+    clone_instance,
+    clone_related,
+)
+
+
+class DynamicFilterExprForm(forms.ModelForm):
+    class Meta:
+        model = DynamicFilterExpr
+        fields = ('name', 'model', 'user')
+
+    sharee = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        label='Share copy with',
+        required=False,
+    )
+
+    def clean_sharee(self):
+        sharee = self.cleaned_data.get('sharee')
+        
+        if sharee:
+            f = furl(self.referer_uri)
+            pk = to_int(f.path.segments)
+
+            expr = DynamicFilterExpr.objects.get(pk=pk)
+            terms = list(expr.dynamicfilterterm_set.all())
+            columns = list(expr.dynamicfiltercolumn_set.all())
+            sorts = list(expr.dynamicfiltercolumnsortorder_set.all())
+            
+            expr.user = sharee
+            clone = clone_instance(expr)
+            clone_related(terms, 'filter', clone)
+            clone_related(columns, 'filter', clone)
+            clone_related(sorts, 'filter', clone)
 
 
 class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
