@@ -161,9 +161,6 @@ class DynamicFilterTerm(models.Model):
         return self.value
 
     def as_q(self):
-        if self.lookup == '-' or self.value == '-':
-            return Q()
-
         term = {self.get_keypath(): self.get_value()}
 
         return (
