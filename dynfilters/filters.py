@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 
-from .api import (
+from .helpers import (
     get_model_admin,
     get_qualified_model_names,
     get_dynfilters_fields,

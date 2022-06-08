@@ -8,7 +8,7 @@ from django.utils.html import format_html, format_html_join
 
 from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 
-from .api import (
+from .helpers import (
     get_model_admin,
     get_model_choices,
     get_dynfilters_fields,

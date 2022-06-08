@@ -8,7 +8,7 @@ from django.db.models.sql.compiler import SQLCompiler
 from django.db.models.sql.query import Query
 from django.utils.translation import gettext_lazy as _
 
-from .api import get_model_obj
+from .helpers import get_model_obj
 from .shunting_yard import shunting_yard_eval
 from .utils import (
     previous,
