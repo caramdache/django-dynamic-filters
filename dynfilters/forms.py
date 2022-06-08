@@ -10,7 +10,25 @@ from .utils import str_as_date, str_as_date_range
 
 
 class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
-    pass
+    def clean(self):
+        i = 0
+
+        for form in self.forms:
+            op, _del = itemgetter('op', 'DELETE')(form.cleaned_data)
+
+            if _del:
+                continue
+
+            if op == '(':
+                i += 1
+            elif op == ')':
+                i -= 1
+
+            if i < 0:
+                raise ValidationError("Missing opening parenthesis")
+
+        if i:
+            raise ValidationError("Missing closing parenthesis")
 
 
 class DynamicFilterTermInlineForm(forms.ModelForm):
@@ -57,17 +75,6 @@ class DynamicFilterTermInlineForm(forms.ModelForm):
 
         else:
             pass # will be handled by model clean()
-
-        if errors:
-            raise ValidationError(errors)
-
-class DynamicFilterExprForm(forms.ModelForm):
-    class Meta:
-        model = DynamicFilterExpr
-        fields = ('name', 'model', 'user', 'is_global')
-
-    def clean(self):
-        errors = {}
 
         if errors:
             raise ValidationError(errors)

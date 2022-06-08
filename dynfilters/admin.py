@@ -16,7 +16,6 @@ from .models import (
 )
 
 from .forms import (
-    DynamicFilterExprForm,
     DynamicFilterTermInlineForm,
     DynamicFilterTermInlineFormSet,
 )
@@ -43,7 +42,7 @@ class DynamicFilterInline(admin.TabularInline):
 class DynamicFilterTermInline(SortableInlineAdminMixin, DynamicFilterInline):
     model = DynamicFilterTerm
     form = DynamicFilterTermInlineForm
-    # formset = DynamicFilterTermInlineFormSet
+    formset = DynamicFilterTermInlineFormSet
     verbose_name = 'Search Criteria'
     verbose_name_plural = 'Search Criterias'
 
@@ -66,7 +65,6 @@ def get_next_url(request):
 
 @admin.register(DynamicFilterExpr)
 class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
-    form = DynamicFilterExprForm
     inlines = [DynamicFilterTermInline, DynamicFilterColumnInline, DynamicFilterColumnSortOrderInline]
 
     list_per_page = 50
