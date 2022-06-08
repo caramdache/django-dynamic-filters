@@ -14,7 +14,7 @@ from .utils import (
 
 
 class DynamicFilter(admin.SimpleListFilter):
-    title = 'filter'
+    title = 'dynamic filter'
     parameter_name = "filter"
     template = 'dynfilters/dynamic_filter.html'
 
@@ -28,19 +28,19 @@ class DynamicFilter(admin.SimpleListFilter):
     def choices(self, changelist):
         yield {
             "selected": self.value() is None,
+            "request_path": self.path,
             "query_string": changelist.get_query_string(remove=[self.parameter_name]),
             "display": "All",
-            "request_path": self.path,
         }
         for lookup, title in self.lookup_choices:
             yield {
                 "selected": self.value() == str(lookup),
+                "request_path": self.path,
                 "query_string": changelist.get_query_string(
                     {self.parameter_name: lookup}
                 ),
                 "display": title,
                 "lookup": lookup,
-                "request_path": self.path,
             }
 
     def lookups(self, request, model_admin):
@@ -66,22 +66,22 @@ class DynamicFilter(admin.SimpleListFilter):
 
             model_admin = get_model_admin(obj)
 
-            fields = flatten([
-                f[0].split('__') 
-                for f in get_dynfilters_fields(model_admin)
-                if f[0] != '-'
+            elementary_fields = flatten([
+                f.split('__') 
+                for f, display in get_dynfilters_fields(model_admin)
+                if f != '-'
             ])
 
             select_related = [
                 f 
                 for f in get_dynfilters_select_related(model_admin)
-                if f in fields
+                if f in elementary_fields
             ]
 
             prefetch_related = [
                 f 
                 for f in get_dynfilters_prefetch_related(model_admin)
-                if f in fields
+                if f in elementary_fields
             ]
 
             return (
