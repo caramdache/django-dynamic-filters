@@ -55,5 +55,8 @@ class DynamicFilterTermInlineForm(forms.ModelForm):
                     except:
                         errors.update({'value': 'Should be a number'})
 
+        else:
+            pass # will be handled by model clean()
+
         if errors:
             raise ValidationError(errors)
