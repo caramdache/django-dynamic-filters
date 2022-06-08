@@ -15,13 +15,17 @@ def get_qualified_model_name(opts):
 
 def get_qualified_model_names(opts):
     # The model may be a proxy on a different site, so we need to consider parents also
-    return [
+    names = [
         get_qualified_model_name(meta)
         for parent in opts.get_parent_list() 
         if (meta := parent._meta)
-    ].append(
+    ]
+
+    names.append(
         get_qualified_model_name(opts)
     )
+
+    return names
 
 def get_model_obj(obj):
     app_label, model_name = obj.model.split('.')
