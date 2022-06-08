@@ -31,7 +31,7 @@ class DynamicFilterTermInlineForm(forms.ModelForm):
                 errors.update({'lookup': 'Missing value'})
 
             if not value:
-                if lookup in ('-', 'iexact', 'icontains', 'range', 'lt', 'gt', 'lte', 'gte'):
+                if lookup not in ('isnull', 'isnotnull', 'istrue', 'isfalse'):
                     errors.update({'value': 'Missing value'})
 
             else:
@@ -49,8 +49,11 @@ class DynamicFilterTermInlineForm(forms.ModelForm):
                             errors.update({'value': 'Should be "DD/MM/YYYY"'})
 
 
-                if lookup in ('lt', 'gt', 'lte', 'gte'):
-                    pass
+                if lookup in ('year', 'month', 'day', 'lt', 'gt', 'lte', 'gte'):
+                    try:
+                        float(value)
+                    except:
+                        errors.update({'value': 'Should be a number'})
 
         if errors:
             raise ValidationError(errors)
