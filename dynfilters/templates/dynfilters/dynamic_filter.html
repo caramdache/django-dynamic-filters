@@ -1,5 +1,5 @@
 {% load static %}
-<h3>By filter</h3>
+<h3>By {{ title }}</h3>
 <ul>
 {% for choice in choices %}
     <li{% if choice.selected %} class="selected"{% endif %}>
