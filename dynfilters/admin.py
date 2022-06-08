@@ -16,6 +16,7 @@ from .models import (
 )
 
 from .forms import (
+    DynamicFilterExprForm,
     DynamicFilterTermInlineForm,
     DynamicFilterTermInlineFormSet,
 )
@@ -38,7 +39,6 @@ class DynamicFilterInline(admin.TabularInline):
             kwargs['widget'] = forms.Select(choices=get_dynfilters_fields(model_admin))
 
         return super().formfield_for_dbfield(db_field, **kwargs)
-
 
 class DynamicFilterTermInline(SortableInlineAdminMixin, DynamicFilterInline):
     model = DynamicFilterTerm
@@ -66,10 +66,10 @@ def get_next_url(request):
 
 @admin.register(DynamicFilterExpr)
 class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
+    form = DynamicFilterExprForm
     inlines = [DynamicFilterTermInline, DynamicFilterColumnInline, DynamicFilterColumnSortOrderInline]
 
     list_per_page = 50
-
     list_display = (
         '_name',
         'model',

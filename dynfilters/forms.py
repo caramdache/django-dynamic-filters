@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 
 from adminsortable2.admin import CustomInlineFormSet
 
-from .models import DynamicFilterTerm
+from .models import DynamicFilterExpr, DynamicFilterTerm
 from .utils import str_as_date, str_as_date_range
 
 
@@ -57,6 +57,17 @@ class DynamicFilterTermInlineForm(forms.ModelForm):
 
         else:
             pass # will be handled by model clean()
+
+        if errors:
+            raise ValidationError(errors)
+
+class DynamicFilterExprForm(forms.ModelForm):
+    class Meta:
+        model = DynamicFilterExpr
+        fields = ('name', 'model', 'user', 'is_global')
+
+    def clean(self):
+        errors = {}
 
         if errors:
             raise ValidationError(errors)
