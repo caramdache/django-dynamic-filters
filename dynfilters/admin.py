@@ -8,6 +8,12 @@ from django.utils.html import format_html, format_html_join
 
 from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
 
+from .api import (
+    get_model_admin,
+    get_model_choices,
+    get_dynfilters_fields,
+)
+
 from .models import (
     DynamicFilterExpr,
     DynamicFilterTerm,
@@ -18,12 +24,6 @@ from .models import (
 from .forms import (
     DynamicFilterTermInlineForm,
     DynamicFilterTermInlineFormSet,
-)
-
-from .utils import (
-    get_model_admin,
-    get_model_choices,
-    get_dynfilters_fields,
 )
 
 

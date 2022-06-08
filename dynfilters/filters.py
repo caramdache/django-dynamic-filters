@@ -2,15 +2,15 @@ from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
 
-from .models import DynamicFilterExpr
-from .utils import (
+from .api import (
     get_model_admin,
     get_qualified_model_names,
     get_dynfilters_fields,
     get_dynfilters_select_related,
     get_dynfilters_prefetch_related,
-    flatten,
 )
+from .models import DynamicFilterExpr
+from .utils import flatten
 
 
 class DynamicFilter(admin.SimpleListFilter):
