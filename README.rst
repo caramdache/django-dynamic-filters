@@ -124,8 +124,8 @@ The following operators and lookups are supported:
         ('gte', 'Greater Than or Equal To'),
     ]
 
-Similar Packages
-----------------
+Alternatives
+------------
 
 * Dynfilters was inspired by the look and feel of `django-advanced-filters`_, but I wanted everything to be based on existing admin forms and inlines, and no JSON.
 * Another interesting package is `django-filter`_.
