@@ -16,7 +16,7 @@ class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
 class DynamicFilterTermInlineForm(forms.ModelForm):
     class Meta:
         model = DynamicFilterTerm
-        fields = ('op', 'field', 'lookup', 'value', 'bilateral', 'order')
+        fields = ('op', 'field', 'lookup', 'value', 'order')
 
     def clean(self):
         errors = {}
