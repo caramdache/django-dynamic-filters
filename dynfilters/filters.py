@@ -19,7 +19,7 @@ class DynamicFilter(admin.SimpleListFilter):
     template = 'dynfilters/dynamic_filter.html'
 
     def __init__(self, request, params, model, model_admin):
-        self.path = request.path
+        self.referer = request.build_absolute_uri()
         return super().__init__(request, params, model, model_admin)
 
     def has_output(self):
@@ -28,14 +28,14 @@ class DynamicFilter(admin.SimpleListFilter):
     def choices(self, changelist):
         yield {
             "selected": self.value() is None,
-            "request_path": self.path,
+            "referer": self.referer,
             "query_string": changelist.get_query_string(remove=[self.parameter_name]),
             "display": "All",
         }
         for lookup, title in self.lookup_choices:
             yield {
                 "selected": self.value() == str(lookup),
-                "request_path": self.path,
+                "referer": self.referer,
                 "query_string": changelist.get_query_string(
                     {self.parameter_name: lookup}
                 ),
