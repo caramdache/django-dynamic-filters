@@ -70,7 +70,7 @@ Integration Example
             '-',
             'first_name',
             'last_name',
-            ('birth_date', 'Date of birth'),
+            ('birth_date', 'Date of birth'),    # Requires the value to be: DD/MM/YYYY
             '-',
             ('address__town', 'City'),
         ]
