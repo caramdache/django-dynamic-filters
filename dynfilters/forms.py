@@ -14,11 +14,11 @@ class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
         i = 0
 
         for form in self.forms:
-            op, _del = itemgetter('op', 'DELETE')(form.cleaned_data)
-
+            _del = form.cleaned_data.get('DELETE')
             if _del:
                 continue
 
+            op = form.cleaned_data.get('op')
             if op == '(':
                 i += 1
             elif op == ')':
