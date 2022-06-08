@@ -1,3 +1,4 @@
+from itertools import tee, chain
 import collections
 import datetime
 import itertools
@@ -13,14 +14,14 @@ def get_qualified_model_name(opts):
     return f'{opts.app_label}.{opts.model_name.capitalize()}'
 
 def get_qualified_model_names(opts):
-    # The model may be a proxy on a different sites, so look at parents also
+    # The model may be a proxy on a different site, so we need to consider parents also
     return [
-        get_qualified_model_name(opts)
-    ] + [
-        f'{meta.app_label}.{meta.model_name.capitalize()}'
+        get_qualified_model_name(meta)
         for parent in opts.get_parent_list() 
         if (meta := parent._meta)
-    ]
+    ].append(
+        get_qualified_model_name(opts)
+    )
 
 def get_model_obj(obj):
     app_label, model_name = obj.model.split('.')
@@ -29,7 +30,6 @@ def get_model_obj(obj):
 def get_model_admin(obj):
     model_obj = get_model_obj(obj)
     return admin.site._registry.get(model_obj)
-
 
 def get_model_choices():
     return [
@@ -80,6 +80,12 @@ def str_as_date_range(value):
         datetime.datetime.strptime(d1, '%d/%m/%Y').date(),
         datetime.datetime.strptime(d2, '%d/%m/%Y').date(),
     ]
+
+
+def previous(some_iterable):
+    prevs, items = tee(some_iterable, 2)
+    prevs = chain([None], prevs)
+    return zip(prevs, items)
 
 
 def flatten(iterable, ltypes=collections.Iterable):

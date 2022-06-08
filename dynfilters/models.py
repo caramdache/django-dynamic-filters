@@ -1,5 +1,3 @@
-from itertools import tee, chain
-
 from django.apps import apps
 from django.contrib.auth.models import User
 from django.db import connection
@@ -13,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from .shunting_yard import shunting_yard_eval
 from .utils import (
     get_model_obj,
+    previous,
     str_as_date, 
     str_as_date_range, 
 )
@@ -31,15 +30,8 @@ class DynamicFilterExpr(models.Model):
     def __str__(self):
         return self.name
 
-    # Make implicit operators explicit to
-    # ensure the ops stack is never empty.
+    # Make implicit operators explicit, to ensure the ops stack is never empty.
     def normalized_terms(self):
-        # https://stackoverflow.com/questions/1011938/loop-that-also-accesses-prev-and-next-values
-        def previous(some_iterable):
-            prevs, items = tee(some_iterable, 2)
-            prevs = chain([None], prevs)
-            return zip(prevs, items)
-
         nterms = []
 
         for prev, item in previous(self.dynamicfilterterm_set.all()):
