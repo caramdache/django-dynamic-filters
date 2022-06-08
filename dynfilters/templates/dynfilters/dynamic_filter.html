@@ -20,12 +20,12 @@
                         <img src="{% static 'admin/img/icon-changelink.svg' %}">
                     </a>
 
-                    <form id="{{ choice.lookup }}" method="POST" style="display:inline;">{% csrf_token %}
+                    <form id="form_{{ choice.lookup }}" method="POST" style="display:inline;">{% csrf_token %}
                         <input type="hidden" name="post" value="yes">
                     </form>
 
                     <a href="#" onclick="javascript:confirmDelete(
-                        '{{ choice.lookup }}', 
+                        'form_{{ choice.lookup }}', 
                         '/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/delete/',
                         '{{ choices.0.query_string|iriencode }}'
 
