@@ -3,7 +3,7 @@ from django.db.models import Q
 # Function that returns value of
 # expression after evaluation.
 # Adapted from https://www.geeksforgeeks.org/expression-evaluation/
-def shunting_yard_eval(tokens):
+def evaluate(tokens):
     # Function to find precedence 
     # of operators.
     def precedence(op): 

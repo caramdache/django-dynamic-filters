@@ -70,11 +70,7 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [DynamicFilterTermInline, DynamicFilterColumnInline, DynamicFilterColumnSortOrderInline]
 
     list_per_page = 50
-    list_display = (
-        '_name',
-        'model',
-        '_creator',
-    )
+    list_display = ('_name', 'model', '_creator')
 
     def get_form(self, request, obj=None, **kwargs):
         request.parent_object = obj

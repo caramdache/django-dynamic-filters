@@ -8,8 +8,8 @@ from django.db.models.sql.compiler import SQLCompiler
 from django.db.models.sql.query import Query
 from django.utils.translation import gettext_lazy as _
 
+from . import shunting_yard
 from .helpers import get_model_obj
-from .shunting_yard import shunting_yard_eval
 from .utils import (
     previous,
     str_as_date, 
@@ -29,7 +29,6 @@ class DynamicFilterExpr(models.Model):
 
     def __str__(self):
         return self.name
-
 
     # Make implicit operators explicit, to ensure the ops stack is never empty.
     def normalized_terms(self):
@@ -55,7 +54,7 @@ class DynamicFilterExpr(models.Model):
 
     def as_q(self):
         terms = self.normalized_terms()
-        return shunting_yard_eval(terms)
+        return shunting_yard.evaluate(terms)
 
     def as_sql(self):
         model_obj = get_model_obj(self)
