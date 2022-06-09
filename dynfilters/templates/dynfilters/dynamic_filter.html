@@ -1,7 +1,7 @@
 {% load static %}
-{% with body='I would like to share this filter with you: ' %}
 <h3>By {{ title }}</h3>
 <ul>
+{% with body='I would like to share this filter with you: ' %}
 {% for choice in choices %}
     <li{% if choice.selected %} class="selected"{% endif %}>
         <span style='float: left;'>
@@ -44,8 +44,8 @@
         <div style='clear:both;'></div>
     </li>
 {% endfor %}
-</ul>
 {% endwith %}
+</ul>
 
 <script>
 function confirmDelete(lookup, href_delete, href_redirect) {
