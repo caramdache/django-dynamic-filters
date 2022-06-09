@@ -78,7 +78,7 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         request.parent_object = obj
-        
+
         form = super().get_form(request, obj, **kwargs)
         form.referer_uri = request.build_absolute_uri()
         return form

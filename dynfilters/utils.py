@@ -4,21 +4,6 @@ import datetime
 import itertools
 
 
-def to_int(value):
-    if isinstance(value, (int, float)):
-        return int(value)
-
-    if isinstance(value, str) and value.isdigit():
-        return int(value)
-
-    if isinstance(value, (list, tuple)):
-        for s in value:
-            if s.isdigit():
-                return int(s)
-
-    return None
-
-
 def str_as_date(value):
     return datetime.datetime.strptime(value, '%d/%m/%Y').date()
 
@@ -50,12 +35,17 @@ def flatten(iterable, ltypes=collections.Iterable):
         else:
             yield first
 
-def clone_instance(obj):
-    obj.pk = None
-    obj.save()
-    return obj
 
-def clone_related(related_objs, field, obj):
-    for related_obj in related_objs:
-        setattr(related_obj, field, obj)
-        clone_instance(related_obj)
+def to_int(value):
+    if isinstance(value, (int, float)):
+        return int(value)
+
+    if isinstance(value, str) and value.isdigit():
+        return int(value)
+
+    if isinstance(value, (list, tuple)):
+        for s in value:
+            if s.isdigit():
+                return int(s)
+
+    return None

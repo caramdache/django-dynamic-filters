@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 from .helpers import (
     get_model_admin,
@@ -19,6 +20,7 @@ class DynamicFilter(admin.SimpleListFilter):
     template = 'dynfilters/dynamic_filter.html'
 
     def __init__(self, request, params, model, model_admin):
+        self.request = request
         self.referer = request.build_absolute_uri()
         return super().__init__(request, params, model, model_admin)
 
@@ -28,19 +30,20 @@ class DynamicFilter(admin.SimpleListFilter):
     def choices(self, changelist):
         yield {
             "selected": self.value() is None,
-            "referer": self.referer,
             "query_string": changelist.get_query_string(remove=[self.parameter_name]),
+            "referer": self.referer,
             "display": "All",
         }
         for lookup, title in self.lookup_choices:
             yield {
                 "selected": self.value() == str(lookup),
-                "referer": self.referer,
                 "query_string": changelist.get_query_string(
                     {self.parameter_name: lookup}
                 ),
+                "referer": self.referer,
                 "display": title,
                 "lookup": lookup,
+                "email_body": self.request.build_absolute_uri(reverse('dynfilters_share', args=(lookup,))),
             }
 
     def lookups(self, request, model_admin):
@@ -61,6 +64,7 @@ class DynamicFilter(admin.SimpleListFilter):
         if self.value() is not None:
             try:
                 obj = DynamicFilterExpr.objects.get(pk=self.value())
+
             except DynamicFilterExpr.DoesNotExist:
                 return queryset # filter no longer exists
 
