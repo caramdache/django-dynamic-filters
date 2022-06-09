@@ -37,7 +37,14 @@ Installation & Set up
         'dynfilters',
     ]
 
-3. Run ``python manage.py migrate`` to create the dynfilters models.
+3. (Optional) Add "dynfilters" URL to your urls.py file (if you wish to enable sharing)::
+
+    urlpatterns = [
+        ...
+        path('dynfilters/', include('dynfilters.urls')),
+    ]
+
+4. Run ``python manage.py migrate`` to create the dynfilters models.
 
 Integration Example
 -------------------
@@ -123,6 +130,11 @@ The following operators and lookups are supported:
         ('lte', 'Less Than or Equal To'),
         ('gte', 'Greater Than or Equal To'),
     ]
+
+Sharing
+-------
+
+Clicking on the sharing icon allows you to share the report with others.
 
 Alternatives
 ------------
