@@ -11,22 +11,22 @@
 
         <span style='float: right;'>
             {% if forloop.first %}
-                    <a href='/dynfilters/{{ spec.model_name }}/add/?next={{ spec.referer|urlencode }}' title="Create new filter">
-                        <img src="{% static 'admin/img/icon-addlink.svg' %}">
-                    </a>
+                <a href='/dynfilters/{{ spec.model_name }}/add/?next={{ spec.referer|urlencode }}' title="Create new filter">
+                    <img src="{% static 'admin/img/icon-addlink.svg' %}">
+                </a>
 
             {% else %}
-                    <a href='/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/change/?next={{ spec.referer|urlencode }}' title="Edit filter" style="display:inline;">
-                        <img src="{% static 'admin/img/icon-changelink.svg' %}">
-                    </a>
+                <a href='/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/change/?next={{ spec.referer|urlencode }}' title="Edit filter" style="display:inline;">
+                    <img src="{% static 'admin/img/icon-changelink.svg' %}">
+                </a>
 
-                    <a href="mailto:?subject={{ spec.email_subject|iriencode }}&body={{ spec.email_text|iriencode }}{{ choice.email_body|urlencode }}" title="Share filter" style="display:inline;">
-                        <img src="{% static 'img/dynfilters/icon-share.svg' %}">
-                    </a>
+                <a href="mailto:?subject={{ spec.email_subject|iriencode }}&body={{ spec.email_text|iriencode }}{{ choice.email_body|urlencode }}" title="Share filter" style="display:inline;">
+                    <img src="{% static 'img/dynfilters/icon-share.svg' %}">
+                </a>
 
-                    <a href="#" onclick="javascript:confirmDelete('/dynfilters/{{ choice.lookup }}/delete/');" title="Delete filter" style="display:inline;">
-                        <img src="{% static 'admin/img/icon-deletelink.svg' %}">
-                    </a>
+                <a href="#" onclick="javascript:confirmDelete('/dynfilters/{{ choice.lookup }}/delete/');" title="Delete filter" style="display:inline;">
+                    <img src="{% static 'admin/img/icon-deletelink.svg' %}">
+                </a>
 
             {% endif %}
         </span>
