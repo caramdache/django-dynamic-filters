@@ -68,7 +68,6 @@ class DynamicFilter(admin.SimpleListFilter):
         if self.value() is not None:
             try:
                 obj = DynamicFilterExpr.objects.get(pk=self.value())
-
             except DynamicFilterExpr.DoesNotExist:
                 return queryset # filter no longer exists
 
