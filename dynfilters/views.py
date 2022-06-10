@@ -1,22 +1,24 @@
 from furl import furl
 
+from django.contrib import messages
 from django.http import HttpResponse
-from django.urls import reverse
 from django.shortcuts import redirect
+from django.urls import reverse
 
 from .clone import clone_object
-from .helpers import get_model_obj
+from .helpers import get_model_obj, redirect_to_referer
 from .models import DynamicFilterExpr
 
 
-def dynfilters_add(request, name):
+def dynfilters_add(request, model_name):
     try:
-        model_obj = get_model_obj(name)
+        model_obj = get_model_obj(model_name)
     except:
-        return HttpResponse('This model does not exist.')
+        messages.error(request, 'This type of model is unknown.')
+        return redirect_to_referer(request)
 
     expr = DynamicFilterExpr.objects.create(
-        model=name,
+        model=model_name,
         user=request.user,
     )
 
@@ -28,22 +30,22 @@ def dynfilters_share(request, id):
     try:
         expr = DynamicFilterExpr.objects.get(pk=id)
     except DynamicFilterExpr.DoesNotExist:
-        return HttpResponse('This filter does not exist.')
+        messages.error(request, 'This filter does not exist.')
+        return redirect(reverse('admin:dynfilters_dynamicfilterexpr_changelist'))
 
     clone = clone_object(expr)
     clone.user = request.user
     clone.save()
 
-    url = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(clone.pk,))
-    
-    return redirect(url)
+    return redirect(reverse('admin:dynfilters_dynamicfilterexpr_change', args=(clone.pk,)))
 
 def dynfilters_delete(request, id):
     try:
         expr = DynamicFilterExpr.objects.get(pk=id)
     except DynamicFilterExpr.DoesNotExist:
-        return HttpResponse('This filter does not exist.')
+        messages.error(request, 'This filter does not exist.')
+        return redirect_to_referer(request)
 
     expr.delete()
 
-    return redirect(request.META["HTTP_REFERER"])
+    return redirect_to_referer(request)
