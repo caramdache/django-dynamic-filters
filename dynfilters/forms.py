@@ -1,4 +1,3 @@
-from furl import furl
 from operator import itemgetter
 
 from django import forms
@@ -14,7 +13,7 @@ from .utils import str_as_date, str_as_date_range
 class DynamicFilterExprForm(forms.ModelForm):
     class Meta:
         model = DynamicFilterExpr
-        fields = ('name', 'model', 'user')
+        fields = ('name',)
 
 
 class DynamicFilterTermInlineFormSet(CustomInlineFormSet):

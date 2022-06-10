@@ -57,7 +57,7 @@ class DynamicFilterExpr(models.Model):
         return shunting_yard.evaluate(terms)
 
     def as_sql(self):
-        model_obj = get_model_obj(self)
+        model_obj = get_model_obj(self.model)
         query = Query(model_obj)
 
         where = self.as_q().resolve_expression(query)

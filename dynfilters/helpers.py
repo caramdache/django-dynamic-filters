@@ -22,12 +22,12 @@ def get_qualified_model_names(opts):
 
     return names
 
-def get_model_obj(obj):
-    app_label, model_name = obj.model.split('.')
+def get_model_obj(qmodel_name):
+    app_label, model_name = qmodel_name.split('.')
     return apps.get_model(app_label, model_name)
 
 def get_model_admin(obj):
-    model_obj = get_model_obj(obj)
+    model_obj = get_model_obj(obj.model)
     return admin.site._registry.get(model_obj)
 
 def get_model_choices():

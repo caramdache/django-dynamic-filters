@@ -19,9 +19,15 @@ class DynamicFilter(admin.SimpleListFilter):
     parameter_name = "filter"
     template = 'dynfilters/dynamic_filter.html'
 
+    email_subject = 'Sharing filter'
+    email_text = 'Hi,\nI would like to share this filter with you:\n\n'
+
     def __init__(self, request, params, model, model_admin):
         self.request = request
         self.referer = request.build_absolute_uri()
+
+        self.model_name = get_qualified_model_names(model._meta)[0]
+
         return super().__init__(request, params, model, model_admin)
 
     def has_output(self):
@@ -31,7 +37,6 @@ class DynamicFilter(admin.SimpleListFilter):
         yield {
             "selected": self.value() is None,
             "query_string": changelist.get_query_string(remove=[self.parameter_name]),
-            "referer": self.referer,
             "display": "All",
         }
         for lookup, title in self.lookup_choices:
@@ -40,7 +45,6 @@ class DynamicFilter(admin.SimpleListFilter):
                 "query_string": changelist.get_query_string(
                     {self.parameter_name: lookup}
                 ),
-                "referer": self.referer,
                 "display": title,
                 "lookup": lookup,
                 "email_body": self.request.build_absolute_uri(reverse('dynfilters_share', args=(lookup,))),

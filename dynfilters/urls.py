@@ -1,7 +1,9 @@
 from django.urls import path
 
-from .views import dynfilters_share
+from . import views
 
 urlpatterns = [
-    path('<int:id>/share/', dynfilters_share, name='dynfilters_share'),
+    path('<str:name>/add/', views.dynfilters_add, name='dynfilters_add'),
+    path('<int:id>/share/', views.dynfilters_share, name='dynfilters_share'),
+    path('<int:id>/delete/', views.dynfilters_delete, name='dynfilters_delete'),
 ]

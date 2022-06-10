@@ -1,7 +1,6 @@
-{% load static %}
+{% load static admin_urls %}
 <h3>By {{ title }}</h3>
 <ul>
-{% with body='I would like to share this filter with you: ' %}
 {% for choice in choices %}
     <li{% if choice.selected %} class="selected"{% endif %}>
         <span style='float: left;'>
@@ -12,29 +11,20 @@
 
         <span style='float: right;'>
             {% if forloop.first %}
-                    <a href='/admin/dynfilters/dynamicfilterexpr/add/?next={{ choice.referer|urlencode }}' title="Create new filter">
+                    <a href='/dynfilters/{{ spec.model_name }}/add/?next={{ spec.referer|urlencode }}' title="Create new filter">
                         <img src="{% static 'admin/img/icon-addlink.svg' %}">
                     </a>
 
             {% else %}
-                    <a href='/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/change/?next={{ choice.referer|urlencode }}' title="Edit filter" style="display:inline;">
+                    <a href='/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/change/?next={{ spec.referer|urlencode }}' title="Edit filter" style="display:inline;">
                         <img src="{% static 'admin/img/icon-changelink.svg' %}">
                     </a>
 
-                    <a href="mailto:?subject=Sharing%20filter&body={{ body|iriencode }}{{ choice.email_body|urlencode }}" title="Share filter" style="display:inline;">
+                    <a href="mailto:?subject={{ spec.email_subject|iriencode }}&body={{ spec.email_text|iriencode }}{{ choice.email_body|urlencode }}" title="Share filter" style="display:inline;">
                         <img src="{% static 'img/dynfilters/icon-share.svg' %}">
                     </a>
 
-                    <form id="form_{{ choice.lookup }}" method="POST" style="display:inline;">{% csrf_token %}
-                        <input type="hidden" name="post" value="yes">
-                    </form>
-
-                    <a href="#" onclick="javascript:confirmDelete(
-                        'form_{{ choice.lookup }}', 
-                        '/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/delete/',
-                        '{{ choices.0.query_string|iriencode }}'
-
-                    );" title="Delete filter" style="display:inline;">
+                    <a href="#" onclick="javascript:confirmDelete('/dynfilters/{{ choice.lookup }}/delete/');" title="Delete filter" style="display:inline;">
                         <img src="{% static 'admin/img/icon-deletelink.svg' %}">
                     </a>
 
@@ -44,30 +34,13 @@
         <div style='clear:both;'></div>
     </li>
 {% endfor %}
-{% endwith %}
 </ul>
 
 <script>
-function confirmDelete(lookup, href_delete, href_redirect) {
+function confirmDelete(href) {
     const deleteLocation = confirm('Do you really want to delete this filter?');
     if (deleteLocation) {
-        var form = document.getElementById(lookup);
-        sendData(form, href_delete, href_redirect);
+        window.location = href;
     }
-}
-
-function sendData(form, href_delete, href_redirect) {
-    var XHR = new XMLHttpRequest();
-    var FD = new FormData(form);
-
-    const crsftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-    FD.append('csrfmiddlewaretoken', crsftoken);
-
-    XHR.addEventListener("load", function(event) {
-        location.href = href_redirect;
-    });
-
-    XHR.open("POST", href_delete);
-    XHR.send(FD);
 }
 </script>
