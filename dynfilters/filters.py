@@ -25,7 +25,6 @@ class DynamicFilter(admin.SimpleListFilter):
     def __init__(self, request, params, model, model_admin):
         self.request = request
         self.referer = request.build_absolute_uri()
-
         self.model_name = get_qualified_model_names(model._meta)[0]
 
         return super().__init__(request, params, model, model_admin)
@@ -47,7 +46,9 @@ class DynamicFilter(admin.SimpleListFilter):
                 ),
                 "display": title,
                 "lookup": lookup,
-                "email_body": self.request.build_absolute_uri(reverse('dynfilters_share', args=(lookup,))),
+                "email_body": self.request.build_absolute_uri(
+                    reverse('dynfilters_share', args=(lookup,))
+                ),
             }
 
     def lookups(self, request, model_admin):
