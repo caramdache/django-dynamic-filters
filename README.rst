@@ -6,13 +6,13 @@ A django ModelAdmin Filter which adds advanced filtering abilities to the admin.
 
 **creating filters**
 
-.. figure:: https://github.com/caramdache/django-dynamic-filters/blob/main/filter_edit.png
+.. figure:: https://github.com/caramdache/django-dynamic-filters/blob/main/images/filter_edit.png
    :alt: Creating a filter
    :width: 768 px
 
 **applying filters**
 
-.. figure:: https://github.com/caramdache/django-dynamic-filters/blob/main/filter_user.png
+.. figure:: https://github.com/caramdache/django-dynamic-filters/blob/main/images/filter_user.png
    :alt: Apply a filter
    :width: 768 px
    
