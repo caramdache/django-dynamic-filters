@@ -63,7 +63,7 @@ class DynamicFilter(admin.SimpleListFilter):
                 DynamicFilterExpr
                     .objects
                     .filter(model__in=model_names)
-                    .filter(user=request.user)
+                    .filter(Q(user=request.user) | Q(is_global=True))
                     .order_by('name')
                 )
         ]

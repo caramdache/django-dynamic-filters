@@ -13,7 +13,7 @@ from .utils import str_as_date, str_as_date_range
 class DynamicFilterExprForm(forms.ModelForm):
     class Meta:
         model = DynamicFilterExpr
-        fields = ('name',)
+        fields = ('name', 'is_global')
 
 
 class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
@@ -21,6 +21,7 @@ class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
         i = 0
 
         for form in self.forms:
+            # Skip if the inline has been marked as deleted
             _del = form.cleaned_data.get('DELETE')
             if _del:
                 continue
