@@ -131,10 +131,19 @@ The following operators and lookups are supported:
         ('gte', 'Greater Than or Equal To'),
     ]
 
+Sharing
+-------
+
+There are two ways dynamic filters can be shared:
+
+1. By marking a filter `global`. The filter will then be available to all admin users.
+
+2. By pressing the `share` icon. The filter will then be shared by email. When the recipients clicks on the received link, a copy of the filter will be created. The edits made to the copy will not be reflected to the original filter.
+
 Alternatives
 ------------
 
-* Dynfilters was inspired by the look and feel of `django-advanced-filters`_, but I wanted everything to be based on admin forms and inlines, and no JSON.
+* Dynfilters was inspired by the look and feel of `django-advanced-filters`_, but I wanted everything to be based on admin forms and inlines, no JSON, and minimal code.
 * Another interesting package is `django-filter`_.
 * And yet another one is `django-admin-search-builder`_.
 
