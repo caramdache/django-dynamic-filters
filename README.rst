@@ -34,6 +34,7 @@ Installation & Set up
 
     INSTALLED_APPS = [
         ...
+        'adminsortable2',
         'dynfilters',
     ]
 
