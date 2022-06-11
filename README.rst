@@ -138,7 +138,7 @@ There are two ways dynamic filters can be shared:
 
 1. By marking a filter `global`. The filter will then be available to all admin users.
 
-2. By pressing the `share` icon. The filter will then be shared by email. When the recipients clicks on the received link, a copy of the filter will be created. The edits made to the copy will not be reflected to the original filter.
+2. By pressing the `share` icon. The filter will then be shared by email. When the recipients clicks on the received link, a copy of the filter will be created. The edits made to the copy will not affect the original filter.
 
 Alternatives
 ------------
