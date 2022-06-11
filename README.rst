@@ -2,6 +2,14 @@
 Django Dynamic Filters
 ======================
 
++-----------+------------------+---------------------+----------+------------+
+| Branch    | Build            | Coverage            | PyPI     | Gitter     |
++===========+==================+=====================+==========+============+
+| Master    | |Build-Master|   | |Coverage-Master|   | |PyPI|   | |Gitter|   |
++-----------+------------------+---------------------+----------+------------+
+| Develop   | |Build-Develop|  | |Coverage-Develop|  |          |            |
++-----------+------------------+---------------------+----------+------------+
+
 A django ModelAdmin Filter which adds advanced filtering abilities to the admin.
 
 **creating filters**
