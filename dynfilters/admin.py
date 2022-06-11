@@ -67,17 +67,14 @@ def get_next_url(request):
 @admin.register(DynamicFilterExpr)
 class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
     form = DynamicFilterExprForm
-    inlines = [DynamicFilterTermInline, DynamicFilterColumnInline, DynamicFilterColumnSortOrderInline]
+    inlines = [DynamicFilterTermInline]#, DynamicFilterColumnInline, DynamicFilterColumnSortOrderInline]
 
     list_per_page = 50
     list_display = ('_name', 'model', '_creator')
 
     def get_form(self, request, obj=None, **kwargs):
         request.parent_object = obj
-
-        form = super().get_form(request, obj, **kwargs)
-        form.referer_uri = request.build_absolute_uri()
-        return form
+        return super().get_form(request, obj, **kwargs)
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         if db_field.name == 'model':
