@@ -98,5 +98,5 @@ class DynamicFilter(admin.SimpleListFilter):
             try:
                 return queryset.filter(obj.as_q())
             except:
-                messages.error(request, 'The selected filter is buggy and needs to be corrected.')
+                messages.error(request, 'The selected filter is buggy and cannot be applied.')
                 return queryset
