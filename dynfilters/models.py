@@ -125,11 +125,13 @@ class DynamicFilterTerm(models.Model):
 
     def clean(self):
         if self.op in ('&', '|', '(', ')'):
+            # Clear irrelevant fields for these operators
             self.field = '-'
             self.lookup = '-'
             self.value = None
 
         elif self.op in ('-', '!'):
+            # Clear irrelevant fields for these operators
             if self.lookup in ('isnull', 'isnotnull', 'istrue', 'isfalse'):
                 self.value = None
 
