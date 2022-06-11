@@ -1,6 +1,7 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.urls import reverse
 
 from .helpers import (
@@ -30,6 +31,8 @@ class DynamicFilter(admin.SimpleListFilter):
         return super().__init__(request, params, model, model_admin)
 
     def has_output(self):
+        # We want the filter to be displayed even when there are no reports,
+        # so that the '+' is always present.
         return True
 
     def choices(self, changelist):
@@ -80,22 +83,20 @@ class DynamicFilter(admin.SimpleListFilter):
                 if f != '-'
             ])
 
-            select_related = [
+            queryset = queryset.select_related(*[
                 f 
                 for f in get_dynfilters_select_related(model_admin)
                 if f in elementary_fields
-            ]
+            ])
 
-            prefetch_related = [
+            queryset = queryset.prefetch_related(*[
                 f 
                 for f in get_dynfilters_prefetch_related(model_admin)
                 if f in elementary_fields
-            ]
+            ])
 
-            return (
-                queryset
-                    .select_related(*select_related)
-                    .prefetch_related(*prefetch_related)
-                    .filter(obj.as_q())
-            )
-            
+            try:
+                return queryset.filter(obj.as_q())
+            except:
+                messages.error(request, 'The selected filter is buggy and needs to be corrected.')
+                return queryset
