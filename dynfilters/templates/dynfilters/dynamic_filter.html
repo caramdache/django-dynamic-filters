@@ -11,12 +11,12 @@
 
         <span style='float: right;'>
             {% if forloop.first %}
-                <a href='/dynfilters/{{ spec.model_name }}/add/?next={{ spec.referer|urlencode }}' title="Create new filter">
+                <a href='/dynfilters/{{ spec.model_name }}/add/' title="Create new filter">
                     <img src="{% static 'admin/img/icon-addlink.svg' %}">
                 </a>
 
             {% else %}
-                <a href='/admin/dynfilters/dynamicfilterexpr/{{ choice.lookup }}/change/?next={{ spec.referer|urlencode }}' title="Edit filter" style="display:inline;">
+                <a href='/dynfilters/{{ choice.lookup }}/change/' title="Edit filter" style="display:inline;">
                     <img src="{% static 'admin/img/icon-changelink.svg' %}">
                 </a>
 

@@ -1,10 +1,5 @@
 from django.apps import apps
 from django.contrib import admin
-from django.shortcuts import redirect
-
-
-def redirect_to_referer(request):
-    return redirect(request.META["HTTP_REFERER"])
 
 
 def get_model_name(opts):

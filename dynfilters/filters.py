@@ -25,14 +25,11 @@ class DynamicFilter(admin.SimpleListFilter):
 
     def __init__(self, request, params, model, model_admin):
         self.request = request
-        self.referer = request.build_absolute_uri()
         self.model_name = get_qualified_model_names(model._meta)[0]
 
         return super().__init__(request, params, model, model_admin)
 
     def has_output(self):
-        # We want the filter to be displayed even when there are no reports,
-        # so that the '+' is always present.
         return True
 
     def choices(self, changelist):
