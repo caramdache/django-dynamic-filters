@@ -4,7 +4,7 @@ Django Dynamic Filters
 
 .. class:: center
 
-|Package| |License| |Build| |Django|
+   |Package| |License| |Build| |Django|
 
 .. |Package| image:: https://badge.fury.io/py/django-dynamic-filters.svg
    :target: https://pypi.python.org/pypi/django-dynamic-filters
