@@ -1,6 +1,9 @@
+from furl import furl
+
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.utils.http import urlencode
 
 from .clone import clone_object
 from .helpers import get_model_obj
@@ -12,6 +15,26 @@ def referer(request):
 
 def redirect_to_referer(request):
     return redirect(referer(request))
+
+def redirect_to_changelist(request):
+    return redirect(reverse('admin:dynfilters_dynamicfilterexpr_changelist'))
+
+def redirect_to_change(request, id, follow=False):
+    url = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(id,))
+
+    if follow:
+        query_string = urlencode({
+            'next': (
+                furl(referer(request))
+                    .remove(['filter'])
+                    .add({'filter': id})
+                    .url
+            ),
+        })
+
+        return redirect(f'{url}?{query_string}')
+
+    return redirect(url)
 
 
 def dynfilters_add(request, model_name):
@@ -26,25 +49,23 @@ def dynfilters_add(request, model_name):
         user=request.user,
     )
 
-    url = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(expr.id,))
-    return redirect(f'{url}?next={referer(request)}')
+    return redirect_to_change(request, expr.id, follow=True)
 
 def dynfilters_share(request, id):
     try:
         expr = DynamicFilterExpr.objects.get(pk=id)
     except DynamicFilterExpr.DoesNotExist:
         messages.error(request, 'This filter does not exist.')
-        return redirect(reverse('admin:dynfilters_dynamicfilterexpr_changelist'))
+        return redirect_to_changelist(request)
 
     clone = clone_object(expr)
     clone.user = request.user
     clone.save()
 
-    return redirect(reverse('admin:dynfilters_dynamicfilterexpr_change', args=(clone.id,)))
+    return redirect_to_change(request, clone.id)
 
 def dynfilters_change(request, id):
-    url = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(id,))
-    return redirect(f'{url}?next={referer(request)}')
+    return redirect_to_change(request, id, follow=True)
 
 def dynfilters_delete(request, id):
     try:
