@@ -2,6 +2,17 @@
 Django Dynamic Filters
 ======================
 
++===============+===========+==========+
+| |Package|   | |License|   | |PyPI|   |
++---------------+-----------+----------+
+
+.. |Package| image:: https://badge.fury.io/py/django-dynamic-filters.svg
+   :target: https://pypi.python.org/pypi/django-dynamic-filters
+.. |License| image:: https://img.shields.io/pypi/l/django-dynamic-filters.svg
+   :target: https://opensource.org/licenses/MIT
+.. |Build| image:: https://img.shields.io/pypi/pyversions/django-dynamic-filters.svg
+   :target: https://pypi.python.org/pypi/django-dynamic-filters
+
 A django ModelAdmin Filter which adds advanced filtering abilities to the admin.
 
 **creating filters**
@@ -144,7 +155,7 @@ There are two ways dynamic filters can be shared:
 Alternatives
 ------------
 
-* Dynfilters was inspired by the look and feel of `django-advanced-filters`_, but I wanted everything to be based on admin forms and inlines, no JSON, and minimal code.
+* Dynfilters was inspired by the look and feel of `django-advanced-filters`_, but is based purely on admin forms and inlines (no JSON).
 * Another interesting package is `django-filter`_.
 * And yet another one is `django-admin-search-builder`_.
 
