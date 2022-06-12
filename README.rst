@@ -4,7 +4,7 @@ Django Dynamic Filters
 
 .. class:: center
 
-|Package| |License| |Build|
+|Package| |License| |Build| |Django|
 
 .. |Package| image:: https://badge.fury.io/py/django-dynamic-filters.svg
    :target: https://pypi.python.org/pypi/django-dynamic-filters
@@ -12,6 +12,8 @@ Django Dynamic Filters
    :target: https://raw.githubusercontent.com/caramdache/django-dynamic-filters/main/LICENSE
 .. |Build| image:: https://img.shields.io/pypi/pyversions/django-dynamic-filters.svg
    :target: https://pypi.python.org/pypi/django-dynamic-filters
+.. |Django| image:: https://img.shields.io/badge/django%20versions-4.0-blue.svg
+   :target: https://www.djangoproject.com
 
 A django ModelAdmin Filter which adds advanced filtering abilities to the admin.
 
