@@ -4,6 +4,7 @@ from django import forms
 from django.apps import apps
 from django.contrib import admin
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils.html import format_html, format_html_join
 
 from adminsortable2.admin import SortableAdminBase, SortableInlineAdminMixin
@@ -101,16 +102,9 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
             super().response_change(request, obj)
         )
 
-    # def response_delete(self, request, obj_display, obj_id):
-    #     url = get_next_url(request)
-    #     return (
-    #         redirect(url)
-    #         if url else
-    #         super().response_delete(request, obj_display, obj_id)
-    #     )
-
     def _creator(self, obj):
         return obj.user
 
     def _name(self, obj):
-        return format_html(f'<a href="/admin/dynfilters/dynamicfilterexpr/{obj.id}/change/">{obj.name}</a>')
+        href = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(obj.id,))
+        return format_html(f'<a href="{href}">{obj.name}</a>')
