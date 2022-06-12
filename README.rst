@@ -3,7 +3,6 @@ Django Dynamic Filters
 ======================
 
 .. class:: center
-
    |Package| |License| |Build| |Django|
 
 .. |Package| image:: https://badge.fury.io/py/django-dynamic-filters.svg
