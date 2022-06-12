@@ -22,11 +22,13 @@ from .forms import (
     DynamicFilterTermInlineFormSet,
 )
 
-from .helpers import (
+from .model_helpers import (
     get_model_admin,
     get_model_choices,
     get_dynfilters_fields,
 )
+
+from .url_helpers import redirect_to_referer_next
 
 
 class DynamicFilterInline(admin.TabularInline):
@@ -61,10 +63,6 @@ class DynamicFilterColumnSortOrderInline(SortableInlineAdminMixin, DynamicFilter
     verbose_name_plural = 'Sort Orders'
 
 
-def get_next_url(request):
-    f = furl(request.META["HTTP_REFERER"])
-    return f.args.get('next')
-
 @admin.register(DynamicFilterExpr)
 class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
     form = DynamicFilterExprForm
@@ -87,24 +85,19 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
         return super().formfield_for_dbfield(db_field,**kwargs)
 
     def response_add(self, request, obj, post_url_continue=None):
-        url = get_next_url(request)
-        return (
-            redirect(url)
-            if url else
-            super().response_add(request, obj, post_url_continue)
-        )
+        response = super().response_add(request, obj, post_url_continue)
+        
+        return redirect_to_referer_next(request, response)
 
     def response_change(self, request, obj):
-        url = get_next_url(request)
-        return (
-            redirect(url)
-            if url else
-            super().response_change(request, obj)
-        )
+        response = super().response_change(request, obj)
+
+        return redirect_to_referer_next(request, response)
 
     def _creator(self, obj):
         return obj.user
 
     def _name(self, obj):
         href = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(obj.id,))
+        
         return format_html(f'<a href="{href}">{obj.name}</a>')

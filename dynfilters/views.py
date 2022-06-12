@@ -1,40 +1,14 @@
-from furl import furl
-
 from django.contrib import messages
-from django.shortcuts import redirect
-from django.urls import reverse
-from django.utils.http import urlencode
 
 from .clone import clone_object
-from .helpers import get_model_obj
+from .model_helpers import get_model_obj
 from .models import DynamicFilterExpr
-
-
-def referer(request):
-    return request.META["HTTP_REFERER"]
-
-def redirect_to_referer(request):
-    return redirect(referer(request))
-
-def redirect_to_changelist(request):
-    return redirect(reverse('admin:dynfilters_dynamicfilterexpr_changelist'))
-
-def redirect_to_change(request, id, follow=False):
-    url = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(id,))
-
-    if follow:
-        query_string = urlencode({
-            'next': (
-                furl(referer(request))
-                    .remove(['filter'])
-                    .add({'filter': id})
-                    .url
-            ),
-        })
-
-        return redirect(f'{url}?{query_string}')
-
-    return redirect(url)
+from .url_helpers import (
+    referer,
+    redirect_to_referer,
+    redirect_to_changelist,
+    redirect_to_change,
+)
 
 
 def dynfilters_add(request, model_name):

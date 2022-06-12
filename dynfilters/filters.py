@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from django.urls import reverse
 
-from .helpers import (
+from .model_helpers import (
     get_model_admin,
     get_qualified_model_names,
     get_dynfilters_fields,

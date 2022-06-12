@@ -9,7 +9,7 @@ from django.db.models.sql.query import Query
 from django.utils.translation import gettext_lazy as _
 
 from . import shunting_yard
-from .helpers import get_model_obj
+from .model_helpers import get_model_obj
 from .utils import (
     previous,
     str_as_date, 
