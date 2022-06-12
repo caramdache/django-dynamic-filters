@@ -2,14 +2,14 @@
 Django Dynamic Filters
 ======================
 
-+===============+===========+==========+
-| |Package|   | |License|   | |PyPI|   |
-+---------------+-----------+----------+
+.. class:: center
+
+|Package| |License| |Build|
 
 .. |Package| image:: https://badge.fury.io/py/django-dynamic-filters.svg
    :target: https://pypi.python.org/pypi/django-dynamic-filters
 .. |License| image:: https://img.shields.io/pypi/l/django-dynamic-filters.svg
-   :target: https://opensource.org/licenses/MIT
+   :target: https://raw.githubusercontent.com/caramdache/django-dynamic-filters/main/LICENSE
 .. |Build| image:: https://img.shields.io/pypi/pyversions/django-dynamic-filters.svg
    :target: https://pypi.python.org/pypi/django-dynamic-filters
 
