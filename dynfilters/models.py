@@ -121,8 +121,16 @@ class DynamicFilterTerm(models.Model):
 
     def __str__(self):
         if self.op in ('-', '!'):
-            comparison = '!=' if self.op == '!' else '=='
-            return f'{self.get_keypath()} {comparison} {self.get_value()}'
+            string = ' OR '.join([
+                f'{self.get_keypath(field)} {operator} {self.get_value()}'
+                for field in self.field.split('|')
+            ])
+
+            return (
+                f'NOT({string})'
+                if self.op == '!'
+                string
+            )
 
         return self.op
 
