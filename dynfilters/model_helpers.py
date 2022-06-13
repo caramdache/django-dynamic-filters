@@ -53,7 +53,10 @@ def get_dynfilters_fields(model_admin):
         if isinstance(f, str):
             return (
                 f, 
-                f.replace('_', ' ').replace('__', ' ').capitalize()
+                ' OR '.join([
+                    s.replace('__', ' ').replace('_', ' ').capitalize() 
+                    for s in f.split('|')
+                ])
             )
 
         return f

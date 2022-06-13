@@ -1,3 +1,6 @@
+from functools import reduce
+from operator import or_
+
 from django.apps import apps
 from django.contrib.auth.models import User
 from django.db import connection
@@ -135,14 +138,14 @@ class DynamicFilterTerm(models.Model):
             if self.lookup in ('isnull', 'isnotnull', 'istrue', 'isfalse'):
                 self.value = None
 
-    def get_keypath(self):
+    def get_keypath(self, field):
         if self.lookup in ('=', 'istrue', 'isfalse'):
-            return self.field
+            return field
 
         if self.lookup in ('isnull', 'isnotnull'):
-            return f'{self.field}__isnull'
+            return f'{field}__isnull'
 
-        return f'{self.field}__{self.lookup}'
+        return f'{field}__{self.lookup}'
 
     def get_value(self):
         if self.lookup in ('isnull', 'istrue'):
@@ -163,12 +166,17 @@ class DynamicFilterTerm(models.Model):
         return self.value
 
     def as_q(self):
-        term = {self.get_keypath(): self.get_value()}
+        terms = [
+            {self.get_keypath(field): self.get_value()}
+            for field in self.field.split('|')
+        ]
+
+        q = reduce(or_, (Q(**term) for term in terms))
 
         return (
-            ~Q(**term)
+            ~q
             if self.op == '!' else
-            Q(**term)
+            q
         )
 
 
