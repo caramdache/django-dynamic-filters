@@ -128,7 +128,7 @@ class DynamicFilterTerm(models.Model):
 
             return (
                 f'NOT({string})'
-                if self.op == '!'
+                if self.op == '!' else
                 string
             )
 
