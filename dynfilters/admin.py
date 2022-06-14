@@ -98,6 +98,11 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
         return obj.user
 
     def _name(self, obj):
+        def icon():
+            if obj.is_global:
+                return '<i class="fa-solid fa-users"></i>'
+            return ''
+
         href = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(obj.id,))
         
-        return format_html(f'<a href="{href}">{obj.name}</a>')
+        return format_html(f'<a href="{href}">{obj.name}&nbsp;{icon()}</a>')
