@@ -119,19 +119,23 @@ class DynamicFilterTerm(models.Model):
     bilateral = models.BooleanField(default=False)
     order = models.PositiveSmallIntegerField(default=0, blank=True, db_index=True)
 
+    @property
+    def fields(self):
+        return self.field.split('|')
+
     def __str__(self):
         if self.op in ('-', '!'):
-            operator = '!=' if self.op == '!' else '=='
+            lookup = '!=' if self.op == '!' else '=='
 
-            string = ' OR '.join([
-                f'{self.get_keypath(field)} {operator} {self.get_value()}'
-                for field in self.field.split('|')
+            expr = ' OR '.join([
+                f'{self.get_keypath(field)} {lookup} {self.get_value()}'
+                for field in self.fields
             ])
 
             return (
-                f'NOT({string})'
+                f'NOT({expr})'
                 if self.op == '!' else
-                string
+                expr
             )
 
         return self.op
@@ -175,13 +179,14 @@ class DynamicFilterTerm(models.Model):
 
         return self.value
 
-    def as_q(self):
-        terms = [
-            {self.get_keypath(field): self.get_value()}
-            for field in self.field.split('|')
-        ]
+    def get_term(self, field):
+        return {self.get_keypath(field): self.get_value()}
 
-        q = reduce(or_, (Q(**term) for term in terms))
+    def as_q(self):
+        q = reduce(or_, [
+            Q(**self.get_term(field))
+            for field in self.fields
+        ])
 
         return (
             ~q
