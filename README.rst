@@ -60,6 +60,8 @@ Installation & Set up
 
 4. Run ``python manage.py migrate`` to create the dynfilters models.
 
+5. Run ``python manage.py collectstatic`` to install the dynfilters media.
+
 Integration Example
 -------------------
 
@@ -91,7 +93,7 @@ Integration Example
             '-',
             'first_name',
             'last_name',
-            'first_name|last_name',             # Will generate Q(first_name=<value>) | Q(last_name=<value>)
+            ('first_name|last_name', 'Name'),   # Will generate: Q(first_name=<value>) | Q(last_name=<value>)
             ('birth_date', 'Date of birth'),    # Requires the value to be: DD/MM/YYYY
             '-',
             ('address__town', 'City'),
@@ -151,9 +153,9 @@ Sharing
 
 There are two ways dynamic filters can be shared:
 
-1. By marking a filter `global`. The filter will then be available to all admin users.
+1. By marking a filter `global`. The filter will be available to all admin users.
 
-2. By pressing the `share` icon. The filter will then be shared by email. When the recipients clicks on the received link, a copy of the filter will be created. The edits made to the copy will not affect the original filter.
+2. By pressing the `share` icon. The filter can then be shared by email. When the recipients clicks on the received link, a copy of the filter will be created. The edits made to the copy will not affect the original filter.
 
 Alternatives
 ------------
