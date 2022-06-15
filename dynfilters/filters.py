@@ -37,17 +37,19 @@ class DynamicFilter(admin.SimpleListFilter):
             "selected": self.value() is None,
             "query_string": changelist.get_query_string(remove=[self.parameter_name]),
             "display": "All",
+            "is_global": False,
         }
-        for lookup, title in self.lookup_choices:
+        for obj, title in self.lookup_choices:
             yield {
-                "selected": self.value() == str(lookup),
+                "selected": self.value() == str(obj.id),
                 "query_string": changelist.get_query_string(
-                    {self.parameter_name: lookup}
+                    {self.parameter_name: obj.id}
                 ),
                 "display": title,
-                "lookup": lookup,
+                "lookup": obj.id,
+                "is_global": obj.is_global,
                 "email_body": self.request.build_absolute_uri(
-                    reverse('dynfilters_share', args=(lookup,))
+                    reverse('dynfilters_share', args=(obj.id,))
                 ),
             }
 
@@ -55,7 +57,7 @@ class DynamicFilter(admin.SimpleListFilter):
         model_names = get_qualified_model_names(model_admin.opts)
         
         return [
-            (o.pk, o.name)
+            (o, o.name)
             for o in (
                 DynamicFilterExpr
                     .objects
