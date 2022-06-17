@@ -131,7 +131,7 @@ class DynamicFilterTerm(models.Model):
 
         if self.op in ('-', '!'):
             expr = ' OR '.join([
-                f'{self.get_keypath(field)} {self.get_operator()} {self.get_value()}'
+                f'{self.get_keypath(field)} {get_operator()} {self.get_value()}'
                 for field in self.fields
             ])
 
