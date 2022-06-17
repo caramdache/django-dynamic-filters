@@ -88,7 +88,6 @@ class DynamicFilterTerm(models.Model):
         ('istartswith', 'Starts with'),
         ('iendswith', 'Ends with'),
         ('in', 'One of'),
-        # ('iregex', 'One of'),
         ('-', '---------'),
         ('range', 'Date Range'),
         ('year', 'Date Year'),
