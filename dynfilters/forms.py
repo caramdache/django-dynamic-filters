@@ -21,7 +21,7 @@ class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
         parenthesis = 0
 
         for form in self.forms:
-            op, deleted = itemgetter('op', 'deleted')(self.cleaned_data)
+            op, deleted = itemgetter('op', 'DELETE')(self.cleaned_data)
             
             if deleted:
                 continue # inline object was deleted by user
