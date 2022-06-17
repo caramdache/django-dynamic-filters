@@ -124,17 +124,21 @@ class DynamicFilterTerm(models.Model):
         return self.field.split('|')
 
     def __str__(self):
+        def get_operator():
+            if self.op == '!':
+                return '!='
+            return '=='
+
         if self.op in ('-', '!'):
             expr = ' OR '.join([
                 f'{self.get_keypath(field)} {self.get_operator()} {self.get_value()}'
                 for field in self.fields
             ])
 
-            return (
+            if self.op == '!':
                 f'NOT({expr})'
-                if self.op == '!' else
-                expr
-            )
+
+            return expr
 
         return self.op
 
@@ -149,11 +153,6 @@ class DynamicFilterTerm(models.Model):
             # Clear irrelevant fields for these operators
             if self.lookup in ('isnull', 'isnotnull', 'istrue', 'isfalse'):
                 self.value = None
-
-    def get_operator(self):
-        if self.op == '!':
-            return '!='
-        return '=='
 
     def get_keypath(self, field):
         if self.lookup in ('=', 'istrue', 'isfalse'):
@@ -191,11 +190,10 @@ class DynamicFilterTerm(models.Model):
             for field in self.fields
         ])
 
-        return (
-            ~q
-            if self.op == '!' else
-            q
-        )
+        if self.op == '!':
+            return ~q
+        
+        return q
 
 
 class DynamicFilterColumn(models.Model):
