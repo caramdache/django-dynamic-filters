@@ -28,7 +28,7 @@ class DynamicFilterExpr(models.Model):
     name = models.CharField(max_length=128, default='Report')
     model = models.CharField(max_length=64, db_index=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True)
-    is_global = models.BooleanField(default=False, db_index=True, help_text='Make filter accessible to all.')
+    is_global = models.BooleanField('Global?', default=False, db_index=True, help_text='Make filter accessible to all.')
 
     def __str__(self):
         return self.name

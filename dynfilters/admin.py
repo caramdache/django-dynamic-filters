@@ -69,7 +69,7 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [DynamicFilterTermInline]#, DynamicFilterColumnInline, DynamicFilterColumnSortOrderInline]
 
     list_per_page = 50
-    list_display = ('_name', 'model', '_creator')
+    list_display = ('name', 'model', 'user', 'is_global')
 
     def get_form(self, request, obj=None, **kwargs):
         request.parent_object = obj
@@ -93,11 +93,3 @@ class DynamicFilterExprAdmin(SortableAdminBase, admin.ModelAdmin):
         response = super().response_change(request, obj)
 
         return redirect_to_referer_next(request, response)
-
-    def _creator(self, obj):
-        return obj.user
-
-    def _name(self, obj):
-        href = reverse('admin:dynfilters_dynamicfilterexpr_change', args=(obj.id,))
-        
-        return format_html(f'<a href="{href}">{obj.name}</a>')
