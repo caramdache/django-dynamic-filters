@@ -7,7 +7,7 @@
             <a href="{{ choice.query_string|iriencode }}" title="{{ choice.display }}">
                 {{ choice.display }}
                 {% if choice.is_global %}
-                    (<img src="{% static 'admin/img/icon-viewlink.svg' %}">)
+                    <img src="{% static 'img/dynfilters/icon-viewlink.svg' %}">
                 {% endif %}
             </a>
         </span>
