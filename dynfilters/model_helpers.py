@@ -9,7 +9,7 @@ def get_qualified_model_name(opts):
     return f'{opts.app_label}.{opts.model_name.capitalize()}'
 
 def get_qualified_model_names(opts):
-    # The model may be a proxy on a different site, so we need to consider parents also
+    # The model may be a proxy, so we need to consider parents also
     names = [
         get_qualified_model_name(meta)
         for parent in opts.get_parent_list() 

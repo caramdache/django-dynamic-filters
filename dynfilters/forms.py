@@ -18,24 +18,23 @@ class DynamicFilterExprForm(forms.ModelForm):
 
 class DynamicFilterTermInlineFormSet(CustomInlineFormSet):
     def clean(self):
-        i = 0
+        parenthesis = 0
 
         for form in self.forms:
-            # Skip if the inline has been marked as deleted
-            _del = form.cleaned_data.get('DELETE')
-            if _del:
-                continue
+            op, deleted = itemgetter('op', 'deleted')(self.cleaned_data)
+            
+            if deleted:
+                continue # inline object was deleted by user
 
-            op = form.cleaned_data.get('op')
             if op == '(':
-                i += 1
+                parenthesis += 1
             elif op == ')':
-                i -= 1
+                parenthesis -= 1
 
-            if i < 0:
+            if parenthesis < 0:
                 raise ValidationError("Missing opening parenthesis")
 
-        if i:
+        if parenthesis:
             raise ValidationError("Missing closing parenthesis")
 
 

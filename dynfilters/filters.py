@@ -72,7 +72,7 @@ class DynamicFilter(admin.SimpleListFilter):
             try:
                 obj = DynamicFilterExpr.objects.get(pk=self.value())
             except DynamicFilterExpr.DoesNotExist:
-                return queryset # filter no longer exists
+                return queryset # filter no longer exists, ignore
 
             model_admin = get_model_admin(obj)
 
